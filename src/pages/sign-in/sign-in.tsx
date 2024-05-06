@@ -23,6 +23,7 @@ interface SignInProps {}
 const SignIn: FC<SignInProps> = () => {
   const { loginForm } = useSignIn();
   const [showPassword, togglePassword] = useToggle();
+  const [rememberMe, , setRememberMe] = useToggle(true);
 
   return (
     <Grow in>
@@ -57,7 +58,7 @@ const SignIn: FC<SignInProps> = () => {
                 error={loginForm.errors.email !== undefined}
                 label='Email'
                 placeholder='Email'
-                autoComplete='off'
+                autoComplete={rememberMe ? 'on' : 'off'}
                 fullWidth
                 InputProps={{
                   startAdornment: (
@@ -79,7 +80,7 @@ const SignIn: FC<SignInProps> = () => {
                 label='Password'
                 placeholder='Password'
                 type={showPassword ? 'text' : 'password'}
-                autoComplete='off'
+                autoComplete={rememberMe ? 'on' : 'off'}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position='start'>
@@ -102,11 +103,22 @@ const SignIn: FC<SignInProps> = () => {
                 alignItems='center'
                 width='100%'
                 display='flex'>
-                <FormControlLabel control={<Checkbox />} label='Remember me' />
-                <Link>Forgot Password?</Link>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      value={rememberMe}
+                      checked={rememberMe}
+                      onChange={(_, value) => {
+                        setRememberMe(value);
+                      }}
+                    />
+                  }
+                  label='Remember me'
+                />
+                <Link href='/forgot-password'>Forgot Password?</Link>
               </Box>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} mt={2}>
               <Button variant='contained' fullWidth type='submit'>
                 Log In
               </Button>

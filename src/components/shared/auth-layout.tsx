@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuthContext } from '../../context/auth/auth-context';
 
@@ -26,7 +26,7 @@ const AuthLayout = () => {
           maxWidth: '1400px',
         }}>
         <Outlet />
-        <Box
+        <Container
           sx={{
             width: '100%',
             display: {
@@ -36,7 +36,6 @@ const AuthLayout = () => {
             },
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: 'dodgerblue',
           }}>
           <Box
             sx={{
@@ -63,7 +62,7 @@ const AuthLayout = () => {
               Everything you need in an easily customizable dashboard.
             </Typography>
           </Box>
-        </Box>
+        </Container>
       </Box>
     </Box>
   );

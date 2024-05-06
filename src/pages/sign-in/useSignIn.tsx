@@ -8,6 +8,7 @@ const useSignIn = () => {
     initialValues,
     validationSchema: signInSchema,
     onSubmit: handleSubmit,
+    validateOnBlur: false,
   });
 
   function handleSubmit(payload: UserSignIn) {

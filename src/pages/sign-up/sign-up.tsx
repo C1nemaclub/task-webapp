@@ -156,7 +156,7 @@ const SignUp: FC<SignUpProps> = () => {
                 }}
               />
             </Grid>
-            <Grid item lg={6} ml='auto' xs={12}>
+            <Grid item lg={6} mr='auto' xs={12}>
               <Button
                 variant='outlined'
                 tabIndex={-2}
@@ -191,7 +191,7 @@ const SignUp: FC<SignUpProps> = () => {
                 />
               </Button>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} mt={2}>
               <Button variant='contained' fullWidth type='submit'>
                 Create Account
               </Button>
