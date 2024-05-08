@@ -1,4 +1,4 @@
-import { Box, Container, Typography } from '@mui/material';
+import { Box, Container, Grow, Typography } from '@mui/material';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuthContext } from '../../context/auth/auth-context';
 
@@ -25,7 +25,18 @@ const AuthLayout = () => {
           backgroundColor: '#fff',
           maxWidth: '1400px',
         }}>
-        <Outlet />
+        <Grow in>
+          <Box
+            p={4}
+            width='100%'
+            display='flex'
+            alignItems='center'
+            justifyContent='center'
+            flexDirection='column'
+            gap={2}>
+            <Outlet />
+          </Box>
+        </Grow>
         <Container
           sx={{
             width: '100%',

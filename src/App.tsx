@@ -1,5 +1,4 @@
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import './App.css';
 import AuthLayout from './components/shared/auth-layout';
 import Toast from './components/shared/toast.tsx';
 import UserLayout from './components/shared/user-layout';

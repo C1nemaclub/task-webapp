@@ -11,6 +11,7 @@ type AuthContextType = {
   logOut: () => void;
   logIn: (data: UserSignIn) => void;
   register: (data: UserSignUp) => void;
+  forgotPassword: (email: string) => void;
 };
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -66,8 +67,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const forgotPassword = async (email: string) => {
+    const response = await pb.collection('users').requestPasswordReset(email);
+    console.log(response);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, logOut, logIn, register }}>
+    <AuthContext.Provider value={{ user, logOut, logIn, register, forgotPassword }}>
       {children}
     </AuthContext.Provider>
   );

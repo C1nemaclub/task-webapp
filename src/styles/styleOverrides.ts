@@ -3,8 +3,19 @@ import { createTheme } from '@mui/material';
 export const theme = createTheme({
   palette: {
     primary: {
-      light: '#ff00ff',
-      main: '#161616',
+      //   light: '#ff00ff',
+      //   main: '#bc560a',
+      contrastText: '#fff',
+      '50': '#eff2fe',
+      '100': '#e0e6fe',
+      '200': '#c6d2ff',
+      '300': '#a5b4fc',
+      '400': '#808df8',
+      '500': '#6366f1',
+      '600': '#6366f1',
+      '700': '#4239ca',
+      '800': '#3631a3',
+      '900': '#312e81',
     },
   },
   components: {
@@ -39,7 +50,7 @@ export const theme = createTheme({
     MuiContainer: {
       styleOverrides: {
         root: {
-          background: '#161616',
+          background: '#312e81',
         },
       },
     },
