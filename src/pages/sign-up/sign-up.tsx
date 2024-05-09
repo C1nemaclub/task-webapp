@@ -185,7 +185,7 @@ const SignUp: FC<SignUpProps> = () => {
       </Box>
       <Typography mt='1.5rem'>
         Already have an Account?
-        <Link href='/sign-in' ml='1rem' underline='hover'>
+        <Link href='/auth/sign-in' ml='1rem' underline='hover'>
           Sign In
         </Link>
       </Typography>

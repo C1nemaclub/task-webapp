@@ -9,7 +9,6 @@ import {
   IconButton,
   InputAdornment,
   Link,
-  TextField,
   Typography,
 } from '@mui/material';
 import { FC } from 'react';
@@ -17,6 +16,7 @@ import useSignIn from './useSignIn';
 import useToggle from '../../hooks/useToggle';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import InputField from '../../components/shared/input-field';
 interface SignInProps {}
 
 const SignIn: FC<SignInProps> = () => {
@@ -38,17 +38,12 @@ const SignIn: FC<SignInProps> = () => {
       <Box component='form' onSubmit={loginForm.handleSubmit}>
         <Grid container columns={12} spacing={2}>
           <Grid item xs={12}>
-            <TextField
+            <InputField
+              form={loginForm}
               name='email'
-              value={loginForm.values.email}
-              onChange={loginForm.handleChange}
-              onBlur={loginForm.handleBlur}
-              helperText={loginForm.errors && <span>{loginForm.errors.email}</span>}
-              error={loginForm.errors.email !== undefined}
               label='Email'
               placeholder='Email'
               autoComplete={rememberMe ? 'on' : 'off'}
-              fullWidth
               InputProps={{
                 startAdornment: (
                   <InputAdornment position='start'>
@@ -59,20 +54,12 @@ const SignIn: FC<SignInProps> = () => {
             />
           </Grid>
           <Grid item xs={12}>
-            <TextField
-              onChange={loginForm.handleChange}
-              value={loginForm.values.password}
+            <InputField
+              form={loginForm}
               name='password'
-              helperText={loginForm.errors && <span>{loginForm.errors.password}</span>}
-              error={loginForm.errors.password !== undefined}
-              onKeyDown={(e) => {
-                console.log(e.getModifierState('CapsLock'));
-              }}
-              fullWidth
               label='Password'
               placeholder='Password'
               type={showPassword ? 'text' : 'password'}
-              autoComplete={rememberMe ? 'on' : 'off'}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position='start'>
@@ -107,7 +94,7 @@ const SignIn: FC<SignInProps> = () => {
                 }
                 label='Remember me'
               />
-              <Link href='/forgot-password'>Forgot Password?</Link>
+              <Link href='/auth/forgot-password'>Forgot Password?</Link>
             </Box>
           </Grid>
           <Grid item xs={12} mt={2}>
@@ -120,7 +107,7 @@ const SignIn: FC<SignInProps> = () => {
 
       <Typography mt='1.5rem'>
         Don't have an account?
-        <Link href='/sign-up' ml='1rem' underline='hover'>
+        <Link href='/auth/sign-up' ml='1rem' underline='hover'>
           Create an account
         </Link>
       </Typography>

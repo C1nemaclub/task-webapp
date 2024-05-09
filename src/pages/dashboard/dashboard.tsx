@@ -14,6 +14,7 @@ const Dashboard = () => {
       <button onClick={logOut}>Logout</button>
       <img src={avatarSrc} width='400px' />
       <Link to='tasks'>Tasks</Link>
+      <h1>Her</h1>
     </div>
   );
 };

@@ -5,13 +5,17 @@ import { UserSignUp } from '../../pages/sign-up/utils/constants';
 import { UserSignIn } from '../../pages/sign-in/utils/constants';
 import { ToastContext } from '../../context/toast-context.tsx';
 import { messages } from '../../utils/constants.ts';
+import { PasswordReset } from '../../pages/password-confirm-reset/use-password-confirm-reset.tsx';
+import { useNavigate } from 'react-router-dom';
 
 type AuthContextType = {
   user: TUser | null;
+  loading: boolean;
   logOut: () => void;
   logIn: (data: UserSignIn) => void;
   register: (data: UserSignUp) => void;
   forgotPassword: (email: string) => void;
+  resetPassword: (data: PasswordReset, token: string) => void;
 };
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -19,6 +23,8 @@ const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const userFromStorage = pb.authStore.model as TUser;
   const [user, setUser] = useState<TUser | null>(userFromStorage || null);
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const toast = useContext(ToastContext);
 
   const logOut = async () => {
@@ -72,8 +78,42 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     console.log(response);
   };
 
+  const resetPassword = async (data: PasswordReset, token: string) => {
+    try {
+      setLoading(true);
+      const oldAuth = pb.authStore.model as TUser;
+      await pb
+        .collection('users')
+        .confirmPasswordReset(token, data.password, data.passwordConfirmation);
+      toast.openToast({
+        severity: 'success',
+        message: 'Password succesfully reseted, please sign in',
+      });
+      setTimeout(() => {
+        if (!oldAuth) {
+          navigate('/auth/sign-in');
+        } else {
+          logIn({
+            email: oldAuth.email,
+            password: data.password,
+          });
+        }
+        setLoading(false);
+      }, 3000);
+      return;
+    } catch (e) {
+      console.log(e, '📷');
+      toast.openToast({
+        severity: 'error',
+        message: messages.register.error,
+      });
+      setLoading(false);
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, logOut, logIn, register, forgotPassword }}>
+    <AuthContext.Provider
+      value={{ user, logOut, logIn, register, forgotPassword, resetPassword, loading }}>
       {children}
     </AuthContext.Provider>
   );

@@ -5,7 +5,7 @@ import { useAuthContext } from '../../context/auth/auth-context';
 
 const UserLayout = () => {
   const { user } = useAuthContext();
-  if (!user) return <Navigate to='/sign-in' />;
+  if (!user) return <Navigate to='/auth/sign-in' />;
 
   return (
     <Box>

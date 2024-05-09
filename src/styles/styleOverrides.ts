@@ -1,10 +1,10 @@
-import { createTheme } from '@mui/material';
+import { createTheme, PaletteColor } from '@mui/material';
 
 export const theme = createTheme({
   palette: {
     primary: {
       //   light: '#ff00ff',
-      //   main: '#bc560a',
+      // main: '#bc560a',
       contrastText: '#fff',
       '50': '#eff2fe',
       '100': '#e0e6fe',
@@ -19,6 +19,13 @@ export const theme = createTheme({
     },
   },
   components: {
+    MuiTypography: {
+      styleOverrides: {
+        h5: ({ theme }) => ({
+          color: theme.palette.primary.main,
+        }),
+      },
+    },
     MuiButton: {
       defaultProps: {
         variant: 'contained',
@@ -49,9 +56,9 @@ export const theme = createTheme({
     },
     MuiContainer: {
       styleOverrides: {
-        root: {
-          background: '#312e81',
-        },
+        root: ({ theme }) => ({
+          background: theme.palette.primary['700' as keyof PaletteColor],
+        }),
       },
     },
   },
