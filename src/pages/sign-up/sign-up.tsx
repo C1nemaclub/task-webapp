@@ -16,10 +16,12 @@ import {
 import { FC } from 'react';
 import useToggle from '../../hooks/useToggle';
 import useSignUp from './useSignUp';
+import { useAuthContext } from '../../context/auth/auth-context';
 interface SignUpProps {}
 
 const SignUp: FC<SignUpProps> = () => {
   const { registerForm } = useSignUp();
+  const { loading } = useAuthContext();
   const [showPassword, togglePassword] = useToggle();
 
   console.log(registerForm.errors);
@@ -177,7 +179,11 @@ const SignUp: FC<SignUpProps> = () => {
             </Button>
           </Grid>
           <Grid item xs={12} mt={2}>
-            <Button variant='contained' fullWidth type='submit'>
+            <Button
+              variant='contained'
+              fullWidth
+              type='submit'
+              disabled={loading || registerForm.isSubmitting}>
               Create Account
             </Button>
           </Grid>

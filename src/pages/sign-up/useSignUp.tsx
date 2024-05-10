@@ -13,7 +13,7 @@ const useSignUp = () => {
     validateOnBlur: false,
   });
 
-  function handleSubmit(payload: UserSignUp) {
+  async function handleSubmit(payload: UserSignUp) {
     register(payload);
   }
 

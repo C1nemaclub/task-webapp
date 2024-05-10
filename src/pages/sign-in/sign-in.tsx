@@ -17,9 +17,11 @@ import useToggle from '../../hooks/useToggle';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import InputField from '../../components/shared/input-field';
+import { useAuthContext } from '../../context/auth/auth-context';
 interface SignInProps {}
 
 const SignIn: FC<SignInProps> = () => {
+  const { loading } = useAuthContext();
   const { loginForm } = useSignIn();
   const [showPassword, togglePassword] = useToggle();
   const [rememberMe, , setRememberMe] = useToggle(true);
@@ -98,7 +100,11 @@ const SignIn: FC<SignInProps> = () => {
             </Box>
           </Grid>
           <Grid item xs={12} mt={2}>
-            <Button variant='contained' fullWidth type='submit'>
+            <Button
+              variant='contained'
+              fullWidth
+              type='submit'
+              disabled={loading || loginForm.isSubmitting}>
               Log In
             </Button>
           </Grid>

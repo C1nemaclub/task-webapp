@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { TUser } from '../../core/types/roles.model';
 import pb from '../../libs/pocketbase';
 import { UserSignUp } from '../../pages/sign-up/utils/constants';
@@ -16,6 +16,7 @@ type AuthContextType = {
   register: (data: UserSignUp) => void;
   forgotPassword: (email: string) => void;
   resetPassword: (data: PasswordReset, token: string) => void;
+  getUser: () => void;
 };
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -35,10 +36,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const logIn = async (data: UserSignIn) => {
     try {
-      console.log('Logging in...');
+      setLoading(true);
       await pb.collection('users').authWithPassword(data.email, data.password);
       const user = pb.authStore.model as TUser;
-      console.log('Logged in as: ', user);
       setUser(user);
     } catch (e) {
       console.log(e, '📷');
@@ -46,11 +46,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         severity: 'error',
         message: messages.login.error,
       });
+    } finally {
+      setLoading(false);
     }
   };
 
   const register = async (data: UserSignUp) => {
     try {
+      setLoading(true);
       const payload = new FormData();
       payload.append('username', String(data.username));
       payload.append('email', data.email);
@@ -61,8 +64,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (data.avatar) {
         payload.append('avatar', data.avatar);
       }
-      const response = await pb.collection('users').create(payload);
-      console.log(response);
+      await pb.collection('users').create(payload);
       logIn({ email: data.email, password: data.password });
     } catch (e) {
       console.log(e, '📷');
@@ -70,6 +72,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         severity: 'error',
         message: messages.register.error,
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -111,9 +115,34 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const getUser = async () => {
+    // const user = pb.authStore.model as TUser;
+    // const roles = await pb.collection('users').getOne(user.id, { expand: 'roleId' });
+    // console.log(roles);
+    try {
+      pb.authStore.isValid && (await pb.collection('users').authRefresh());
+      setUser(pb.authStore.model as TUser);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    getUser();
+  }, []);
+
   return (
     <AuthContext.Provider
-      value={{ user, logOut, logIn, register, forgotPassword, resetPassword, loading }}>
+      value={{
+        user,
+        logOut,
+        logIn,
+        register,
+        forgotPassword,
+        resetPassword,
+        loading,
+        getUser,
+      }}>
       {children}
     </AuthContext.Provider>
   );

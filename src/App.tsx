@@ -1,4 +1,4 @@
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import AuthLayout from './components/shared/auth-layout';
 import Toast from './components/shared/toast.tsx';
 import UserLayout from './components/shared/user-layout';
@@ -18,6 +18,7 @@ function App() {
           <Toast />
           <AuthProvider>
             <Routes>
+              <Route index element={<Navigate to='/auth/sign-in' />} />
               <Route path='/auth' element={<AuthLayout />}>
                 <Route path='sign-in' element={<SignIn />} />
                 <Route path='sign-up' element={<SignUp />} />
