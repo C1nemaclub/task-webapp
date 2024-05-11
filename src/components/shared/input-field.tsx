@@ -1,5 +1,4 @@
 import { TextField, TextFieldProps, Typography } from '@mui/material';
-import React from 'react';
 import { FormikProps } from 'formik';
 
 type InputFieldProps = TextFieldProps & {

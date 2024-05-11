@@ -1,5 +1,5 @@
 import { AlertColor } from '@mui/material';
-import React, { ReactNode, createContext, useState } from 'react';
+import { ReactNode, createContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 type ToastPayloadType = {

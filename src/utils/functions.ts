@@ -4,8 +4,8 @@ export const isValidFileType = (
   fileName: string,
   fileType: keyof typeof validFileExtensions
 ) => {
-  return (
-    fileName &&
-    validFileExtensions[fileType].indexOf(String(fileName.split('.').pop())) > -1
-  );
+  if (fileName) {
+    return validFileExtensions[fileType].indexOf(String(fileName.split('.').pop())) > -1;
+  }
+  return false;
 };

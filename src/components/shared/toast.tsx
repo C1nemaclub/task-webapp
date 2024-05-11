@@ -1,5 +1,5 @@
 import { Alert, Snackbar } from '@mui/material';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { ToastContext } from '../../context/toast-context';
 
 const Toast = () => {
