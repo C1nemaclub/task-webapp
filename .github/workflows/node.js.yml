@@ -34,6 +34,6 @@ jobs:
       LocalVar: Hello
     steps:
       - name: Print the secret
-        run: echo "the secret is $SECRET"
+        run: echo "the secret is ${{secrets.SECRET}}"
       - name: Print the local
         run: echo "Local Variable is /:/ $LocalVar"
