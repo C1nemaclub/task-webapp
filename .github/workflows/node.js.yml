@@ -28,3 +28,12 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
       - run: npm test --if-present
+  read_secrets:
+    runs-on: ubuntu-latest
+    env:
+      LocalVar: Hello
+    steps:
+      - name: Print the secret
+        run: echo "the secret is $SECRET"
+      - name: Print the local
+        run: echo "Local Variable is /:/ $LocalVar"
