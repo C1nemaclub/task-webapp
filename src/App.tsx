@@ -28,9 +28,12 @@ function App() {
                   element={<PasswordConfirmReset />}
                 />
               </Route>
-              <Route path='/dashboard' element={<UserLayout />}>
-                <Route index element={<Dashboard />} />
+              <Route path='/overview' element={<UserLayout />}>
+                <Route index element={<Navigate to='/overview/dashboard' />} />
+                <Route path='dashboard' element={<Dashboard />} />
                 <Route path='tasks' element={<h2>Tasks</h2>} />
+                <Route path='teams' element={<h2>Teams</h2>} />
+                <Route path='settings' element={<h2>Settings</h2>} />
               </Route>
             </Routes>
           </AuthProvider>

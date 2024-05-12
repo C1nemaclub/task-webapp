@@ -17,6 +17,9 @@ import { FC, useContext } from 'react';
 import { AuthContext } from '../../context/auth/auth-context';
 import useToggle from '../../hooks/useToggle';
 import useSignUp from './useSignUp';
+import Logo from '../../components/shared/logo';
+import InputField from '../../components/shared/input-field';
+import BadgeIcon from '@mui/icons-material/Badge';
 interface SignUpProps {}
 
 const SignUp: FC<SignUpProps> = () => {
@@ -24,35 +27,29 @@ const SignUp: FC<SignUpProps> = () => {
   const { loading } = useContext(AuthContext);
   const [showPassword, togglePassword] = useToggle();
 
-  console.log(registerForm.errors);
-
   return (
     <>
-      <Typography component='h2' variant='h4' alignSelf='start'>
-        Tasky
-      </Typography>
+      <Logo title='Tasky' />
       <Typography
         component='h2'
         variant='h5'
         fontWeight='bold'
         alignSelf='start'></Typography>
+      <Typography component='h2' variant='h5' fontWeight='bold' alignSelf='start'>
+        Create an Account
+      </Typography>
       <Typography alignSelf='start' mb='2rem' color='#ccc'>
         Welcome aboard! Register now and let's make magic happen together.
       </Typography>
       <Box component='form' onSubmit={registerForm.handleSubmit}>
         <Grid container columns={12} spacing={2}>
           <Grid item xs={12} lg={6}>
-            <TextField
+            <InputField
+              form={registerForm}
               name='email'
-              value={registerForm.values.email}
-              onChange={registerForm.handleChange}
-              onBlur={registerForm.handleBlur}
-              helperText={registerForm.errors && <span>{registerForm.errors.email}</span>}
-              error={registerForm.errors.email !== undefined}
               label='Email'
               placeholder='Email'
               autoComplete='off'
-              fullWidth
               InputProps={{
                 startAdornment: (
                   <InputAdornment position='start'>
@@ -63,12 +60,9 @@ const SignUp: FC<SignUpProps> = () => {
             />
           </Grid>
           <Grid item xs={12} lg={6}>
-            <TextField
+            <InputField
+              form={registerForm}
               name='name'
-              value={registerForm.values.name}
-              onChange={registerForm.handleChange}
-              helperText={registerForm.errors && <span>{registerForm.errors.name}</span>}
-              error={registerForm.errors.name !== undefined}
               label='Name'
               placeholder='Name'
               autoComplete='off'
@@ -76,27 +70,19 @@ const SignUp: FC<SignUpProps> = () => {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position='start'>
-                    <MailOutlineIcon />
+                    <BadgeIcon />
                   </InputAdornment>
                 ),
               }}
             />
           </Grid>
-
           <Grid item xs={12} lg={6}>
-            <TextField
-              onChange={registerForm.handleChange}
-              value={registerForm.values.password}
+            <InputField
+              form={registerForm}
               name='password'
-              helperText={
-                registerForm.errors && <span>{registerForm.errors.password}</span>
-              }
-              error={registerForm.errors.password !== undefined}
-              fullWidth
               label='Password'
               placeholder='Password'
               type={showPassword ? 'text' : 'password'}
-              autoComplete='off'
               InputProps={{
                 startAdornment: (
                   <InputAdornment position='start'>
@@ -114,17 +100,9 @@ const SignUp: FC<SignUpProps> = () => {
             />
           </Grid>
           <Grid item xs={12} lg={6}>
-            <TextField
-              onChange={registerForm.handleChange}
-              value={registerForm.values.passwordConfirmation}
+            <InputField
+              form={registerForm}
               name='passwordConfirmation'
-              helperText={
-                registerForm.errors && (
-                  <span>{registerForm.errors.passwordConfirmation}</span>
-                )
-              }
-              error={registerForm.errors.passwordConfirmation !== undefined}
-              fullWidth
               label='Confirm Password'
               placeholder='Confirm Password'
               type={showPassword ? 'text' : 'password'}

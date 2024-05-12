@@ -6,7 +6,7 @@ import HeroImage from '../../assets/hero.svg';
 
 const AuthLayout = () => {
   const { user } = useContext(AuthContext);
-  if (user) return <Navigate to='/dashboard' />;
+  if (user) return <Navigate to='/overview' />;
 
   return (
     <Box
@@ -63,10 +63,8 @@ const AuthLayout = () => {
               sx={{
                 height: '100%',
                 width: 350,
-                // maxHeight: { xs: 233, md: 167 },
-                // maxWidth: { xs: 350, md: 250 },
               }}
-              alt='The house from the offer.'
+              alt='Clipboard'
               src={HeroImage}
             />
             <Typography

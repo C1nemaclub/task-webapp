@@ -1,6 +1,6 @@
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../context/auth/auth-context';
-import { useContext } from 'react';
 
 const Dashboard = () => {
   const { logOut, user } = useContext(AuthContext);
@@ -10,12 +10,14 @@ const Dashboard = () => {
 
   return (
     <div>
-      <h2>Dashboard </h2>
-      <h1>{user?.email}</h1>
-      <button onClick={logOut}>Logout</button>
-      <img src={avatarSrc} width='400px' />
-      <Link to='tasks'>Tasks</Link>
-      <h1>Her</h1>
+      <div>
+        <h2>Dashboard </h2>
+        <h1>{user?.email}</h1>
+        <button onClick={logOut}>Logout</button>
+        <img src={avatarSrc} width='400px' />
+        <Link to='tasks'>Tasks</Link>
+        <h1>Her</h1>
+      </div>
     </div>
   );
 };

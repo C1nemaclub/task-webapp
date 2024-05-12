@@ -7,17 +7,16 @@ type InputFieldProps = TextFieldProps & {
 };
 
 const InputField = ({ name, form, ...props }: InputFieldProps) => {
+  const isError = !!form.errors[name] && !!form.touched[name] && form.submitCount >= 1;
   return (
     <TextField
       name={name}
       onChange={form.handleChange}
       onBlur={form.handleBlur}
       value={form.values[name]}
-      error={!!form.errors[name]}
+      error={isError}
       helperText={
-        form.errors && (
-          <Typography component='span'>{form.errors[name] as string}</Typography>
-        )
+        isError && <Typography component='span'>{form.errors[name] as string}</Typography>
       }
       fullWidth
       {...props}

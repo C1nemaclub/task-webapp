@@ -1,8 +1,11 @@
+import GithubIcon from '@mui/icons-material/GitHub';
+import GoogleIcon from '@mui/icons-material/Google';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import {
   Box,
-  Button,
   Checkbox,
   FormControlLabel,
   Grid,
@@ -12,15 +15,13 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import GoogleIcon from '@mui/icons-material/Google';
-import GithubIcon from '@mui/icons-material/GitHub';
 import { FC, useContext } from 'react';
-import useSignIn from './useSignIn';
-import useToggle from '../../hooks/useToggle';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import CustomButton from '../../components/shared/CustomButton';
 import InputField from '../../components/shared/input-field';
+import Logo from '../../components/shared/logo';
 import { AuthContext } from '../../context/auth/auth-context';
+import useToggle from '../../hooks/useToggle';
+import useSignIn from './useSignIn';
 interface SignInProps {}
 
 const SignIn: FC<SignInProps> = () => {
@@ -31,9 +32,7 @@ const SignIn: FC<SignInProps> = () => {
 
   return (
     <>
-      <Typography component='h2' variant='h4' alignSelf='start'>
-        Tasky
-      </Typography>
+      <Logo title='Tasky' />
       <Typography component='h2' variant='h5' fontWeight='bold' alignSelf='start'>
         Log in to your Account
       </Typography>
@@ -103,30 +102,32 @@ const SignIn: FC<SignInProps> = () => {
             </Box>
           </Grid>
           <Grid item xs={12} mt={2}>
-            <Button
+            <CustomButton
               variant='contained'
               fullWidth
               type='submit'
-              disabled={loading || loginForm.isSubmitting}>
-              Log In
-            </Button>
+              loading={loading || loginForm.isSubmitting}>
+              {loading || loginForm.isSubmitting ? 'Logging In' : 'Log In'}
+            </CustomButton>
           </Grid>
         </Grid>
       </Box>
       <Typography component='p'>or</Typography>
       <Stack direction='row' spacing={4}>
-        <Button
+        <CustomButton
+          disabled={loading || loginForm.isSubmitting}
           startIcon={<GoogleIcon />}
           variant='outlined'
           onClick={() => authWithProvider('google')}>
           Google
-        </Button>
-        <Button
+        </CustomButton>
+        <CustomButton
+          disabled={loading || loginForm.isSubmitting}
           startIcon={<GithubIcon />}
           variant='outlined'
           onClick={() => authWithProvider('github')}>
           Github
-        </Button>
+        </CustomButton>
       </Stack>
       <Typography mt='1.5rem'>
         Don't have an account?

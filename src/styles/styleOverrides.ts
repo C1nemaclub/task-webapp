@@ -1,9 +1,8 @@
 import { createTheme, PaletteColor } from '@mui/material';
-
 export const theme = createTheme({
   palette: {
     primary: {
-      //   light: '#ff00ff',
+      // light: '#ff00ff',
       // main: '#bc560a',
       contrastText: '#fff',
       '50': '#eff2fe',
@@ -16,6 +15,11 @@ export const theme = createTheme({
       '700': '#4239ca',
       '800': '#3631a3',
       '900': '#312e81',
+    },
+    text: {
+      // primary: '#fff',
+      // secondary: '#fff',
+      disabled: '#00ff00',
     },
   },
   components: {
@@ -34,6 +38,7 @@ export const theme = createTheme({
         root: {
           paddingTop: '.6rem',
           paddingBottom: '.6rem',
+          // borderRadius: '0',
         },
       },
     },
@@ -42,6 +47,9 @@ export const theme = createTheme({
         root: {
           '& span': {
             color: 'red',
+          },
+          '& .MuiOutlinedInput-root': {
+            // borderRadius: '0',
           },
         },
       },

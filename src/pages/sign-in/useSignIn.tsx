@@ -1,4 +1,4 @@
-import { useFormik } from 'formik';
+import { FormikHelpers, useFormik } from 'formik';
 import { initialValues, signInSchema, UserSignIn } from './utils/constants';
 import { AuthContext } from '../../context/auth/auth-context';
 import { useContext } from 'react';
@@ -11,8 +11,12 @@ const useSignIn = () => {
     onSubmit: handleSubmit,
   });
 
-  function handleSubmit(payload: UserSignIn) {
+  function handleSubmit(
+    payload: UserSignIn,
+    { setSubmitting }: FormikHelpers<UserSignIn>
+  ) {
     logIn(payload);
+    setSubmitting(false);
   }
 
   return { loginForm };

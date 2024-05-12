@@ -10,8 +10,6 @@ const useSignUp = () => {
     initialValues: initialValues,
     validationSchema: signUpSchema,
     onSubmit: handleSubmit,
-    validateOnChange: true,
-    validateOnBlur: false,
   });
 
   async function handleSubmit(payload: UserSignUp) {
