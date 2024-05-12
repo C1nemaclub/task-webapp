@@ -3,16 +3,20 @@ import { useContext } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { AuthContext } from '../../context/auth/auth-context';
 import HeroImage from '../../assets/hero.svg';
+import useWindowSize from '../../hooks/use-window-size';
 
 const AuthLayout = () => {
   const { user } = useContext(AuthContext);
+  const {
+    windowSize: { width },
+  } = useWindowSize();
   if (user) return <Navigate to='/overview' />;
 
   return (
     <Box
       sx={{
         height: '100%',
-        padding: '2rem',
+        padding: width > 800 ? '2rem' : '0',
         backgroundColor: 'gray',
         display: 'flex',
         justifyContent: 'center',

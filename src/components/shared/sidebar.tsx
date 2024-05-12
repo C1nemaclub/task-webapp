@@ -18,21 +18,21 @@ import Logo from './logo';
 const drawerWidth = 240;
 
 const drawerStyle = {
-  width: drawerWidth,
+  // width: drawerWidth,
   height: '100%',
   minHeight: '100vh',
   flexShrink: 0,
   position: 'sticky',
   top: 64,
-  '& .MuiDrawer-paper': {
-    padding: '20px 0px 0px 20px',
-    width: drawerWidth,
-    height: '100%',
-    boxSizing: 'border-box',
-    position: 'sticky',
-    top: 64,
-    overflow: 'visible',
-  },
+  // '& .MuiDrawer-paper': {
+  //   padding: '20px 0px 0px 20px',
+  //   // width: drawerWidth,
+  //   height: '100%',
+  //   boxSizing: 'border-box',
+  //   position: 'sticky',
+  //   top: 64,
+  //   overflow: 'visible',
+  // },
   '& .MuiDivider-root': {
     backgroundColor: 'transparent',
   },
@@ -48,19 +48,30 @@ const categories = [
 const Sidebar = () => {
   const {
     windowSize: { width },
+    isMobile,
   } = useWindowSize();
   return (
     <Drawer
       anchor='left'
       variant='persistent'
-      open={width > 800 ? true : false}
+      open
+      // open={width > 800 ? true : false}
       sx={{
-        marginRight: width > 800 ? '0' : '-240px',
+        marginRight: width > 800 ? '0' : '0px',
         transition: '.3s ease-in-out',
+        '& .MuiDrawer-paper': {
+          padding: width > 800 ? '20px 0px 0px 20px' : '10px',
+          width: width > 800 ? drawerWidth : 70,
+          height: '100%',
+          boxSizing: 'border-box',
+          position: 'sticky',
+          top: 64,
+          overflow: 'visible',
+        },
         ...drawerStyle,
       }}>
       <Logo
-        title='Tasky'
+        title={isMobile ? undefined : 'Tasky'}
         textProps={{
           variant: 'h5',
           fontWeight: 'bold',
@@ -71,47 +82,83 @@ const Sidebar = () => {
           marginTop: '1rem',
           overflow: 'hidden',
         }}>
-        {categories.map(({ name, id, route, Icon }) => (
-          <ListItem key={id} disablePadding>
+        {categories.map(({ name, id, route, Icon }) => {
+          if (width > 800) {
+            return (
+              <ListItem key={id} disablePadding>
+                <NavLink
+                  key={name}
+                  to={route}
+                  className={({ isActive }) => (isActive ? 'active-nav nav' : 'nav')}>
+                  {({ isActive }) => {
+                    return (
+                      <ListItemButton
+                        disableRipple
+                        sx={{
+                          padding: 0,
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          width: '100%',
+                        }}>
+                        <IconButton>
+                          <Tooltip title={name} enterDelay={100}>
+                            <Icon
+                              sx={{
+                                color: isActive ? 'primary.contrastText' : '',
+                                transition: '.5s ease-in-out',
+                              }}
+                            />
+                          </Tooltip>
+                        </IconButton>
+                        <ListItemText
+                          secondary={name}
+                          sx={{
+                            '& .MuiTypography-root': {
+                              color: isActive ? 'primary.contrastText' : '',
+                              transition: '.5s ease-in-out',
+                            },
+                          }}
+                        />
+                      </ListItemButton>
+                    );
+                  }}
+                </NavLink>
+              </ListItem>
+            );
+          }
+          return (
             <NavLink
               key={name}
               to={route}
-              className={({ isActive }) => (isActive ? 'active-nav nav' : 'nav')}>
+              className={({ isActive }) =>
+                isActive ? 'active-nav-mobile mobile-nav' : 'mobile-nav'
+              }>
               {({ isActive }) => {
                 return (
                   <ListItemButton
                     disableRipple
                     sx={{
-                      padding: 0,
                       display: 'flex',
-                      justifyContent: 'space-between',
                       width: '100%',
+                      justifyContent: 'center',
                     }}>
                     <IconButton>
                       <Tooltip title={name} enterDelay={100}>
                         <Icon
+                          fontSize='medium'
                           sx={{
-                            color: isActive ? 'primary.contrastText' : '',
-                            transition: '.5s ease-in-out',
+                            color: isActive ? 'primary.main' : '',
+                            transition: '.1s ease-in-out',
                           }}
                         />
                       </Tooltip>
                     </IconButton>
-                    <ListItemText
-                      secondary={name}
-                      sx={{
-                        '& .MuiTypography-root': {
-                          color: isActive ? 'primary.contrastText' : '',
-                          transition: '.5s ease-in-out',
-                        },
-                      }}
-                    />
                   </ListItemButton>
                 );
               }}
             </NavLink>
-          </ListItem>
-        ))}
+          );
+        })}
       </List>
     </Drawer>
   );
