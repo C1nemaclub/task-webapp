@@ -1,12 +1,12 @@
 import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import AuthLayout from './components/shared/auth-layout';
+import AuthLayout from './components/shared/auth-layout.tsx';
 import Toast from './components/shared/toast.tsx';
-import UserLayout from './components/shared/user-layout';
+import UserLayout from './components/shared/user-layout.tsx';
 import Dashboard from './pages/dashboard/dashboard';
-import SignIn from './pages/sign-in/sign-in';
-import ForgotPassword from './pages/forgot-password/forgot-password';
-import PasswordConfirmReset from './pages/password-confirm-reset/password-confirm-reset';
-import SignUp from './pages/sign-up/sign-up';
+import SignIn from './pages/sign-in/sign-in.tsx';
+import ForgotPassword from './pages/forgot-password/forgot-password.tsx';
+import PasswordConfirmReset from './pages/password-confirm-reset/password-confirm-reset.tsx';
+import SignUp from './pages/sign-up/sign-up.tsx';
 import { AuthProvider } from './context/auth/auth-context.tsx';
 import { ToastProvider } from './context/toast-context.tsx';
 

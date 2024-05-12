@@ -13,15 +13,15 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { FC } from 'react';
+import { FC, useContext } from 'react';
+import { AuthContext } from '../../context/auth/auth-context';
 import useToggle from '../../hooks/useToggle';
 import useSignUp from './useSignUp';
-import { useAuthContext } from '../../context/auth/auth-context';
 interface SignUpProps {}
 
 const SignUp: FC<SignUpProps> = () => {
   const { registerForm } = useSignUp();
-  const { loading } = useAuthContext();
+  const { loading } = useContext(AuthContext);
   const [showPassword, togglePassword] = useToggle();
 
   console.log(registerForm.errors);
@@ -31,9 +31,11 @@ const SignUp: FC<SignUpProps> = () => {
       <Typography component='h2' variant='h4' alignSelf='start'>
         Tasky
       </Typography>
-      <Typography component='h2' variant='h5' fontWeight='bold' alignSelf='start'>
-        Create an Account
-      </Typography>
+      <Typography
+        component='h2'
+        variant='h5'
+        fontWeight='bold'
+        alignSelf='start'></Typography>
       <Typography alignSelf='start' mb='2rem' color='#ccc'>
         Welcome aboard! Register now and let's make magic happen together.
       </Typography>

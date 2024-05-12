@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
-import { useAuthContext } from '../../context/auth/auth-context';
+import { AuthContext } from '../../context/auth/auth-context';
+import { useContext } from 'react';
 
 const Dashboard = () => {
-  const { logOut, user } = useAuthContext();
+  const { logOut, user } = useContext(AuthContext);
   console.log(user, 'Dashboard');
 
   const avatarSrc = `http://127.0.0.1:8090/api/files/_pb_users_auth_/${user?.id}/${user?.avatar}`;

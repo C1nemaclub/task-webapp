@@ -1,9 +1,10 @@
 import { useFormik } from 'formik';
+import { useContext } from 'react';
+import { AuthContext } from '../../context/auth/auth-context';
 import { initialValues, signUpSchema, UserSignUp } from './utils/constants';
-import { useAuthContext } from '../../context/auth/auth-context';
 
 const useSignUp = () => {
-  const { register } = useAuthContext();
+  const { register } = useContext(AuthContext);
 
   const registerForm = useFormik({
     initialValues: initialValues,

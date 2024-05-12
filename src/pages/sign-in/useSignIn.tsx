@@ -1,14 +1,14 @@
 import { useFormik } from 'formik';
 import { initialValues, signInSchema, UserSignIn } from './utils/constants';
-import { useAuthContext } from '../../context/auth/auth-context';
+import { AuthContext } from '../../context/auth/auth-context';
+import { useContext } from 'react';
 const useSignIn = () => {
-  const { logIn } = useAuthContext();
+  const { logIn } = useContext(AuthContext);
 
   const loginForm = useFormik({
     initialValues,
     validationSchema: signInSchema,
     onSubmit: handleSubmit,
-    validateOnBlur: false,
   });
 
   function handleSubmit(payload: UserSignIn) {

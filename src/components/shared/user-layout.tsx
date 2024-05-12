@@ -1,9 +1,10 @@
 import { Box } from '@mui/material';
+import { useContext } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import { useAuthContext } from '../../context/auth/auth-context';
+import { AuthContext } from '../../context/auth/auth-context';
 
 const UserLayout = () => {
-  const { user } = useAuthContext();
+  const { user } = useContext(AuthContext);
   if (!user) return <Navigate to='/auth/sign-in' />;
 
   return (

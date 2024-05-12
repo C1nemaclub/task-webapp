@@ -1,9 +1,11 @@
 import { Box, Container, Grow, Typography } from '@mui/material';
+import { useContext } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import { useAuthContext } from '../../context/auth/auth-context';
+import { AuthContext } from '../../context/auth/auth-context';
+import HeroImage from '../../assets/hero.svg';
 
 const AuthLayout = () => {
-  const { user } = useAuthContext();
+  const { user } = useContext(AuthContext);
   if (user) return <Navigate to='/dashboard' />;
 
   return (
@@ -56,21 +58,35 @@ const AuthLayout = () => {
               alignItems: 'center',
               padding: '2rem',
             }}>
+            <Box
+              component='img'
+              sx={{
+                height: '100%',
+                width: 350,
+                // maxHeight: { xs: 233, md: 167 },
+                // maxWidth: { xs: 350, md: 250 },
+              }}
+              alt='The house from the offer.'
+              src={HeroImage}
+            />
             <Typography
+              mt={2}
               component='h2'
               variant='h5'
+              textAlign='center'
               sx={{
                 color: '#fff',
                 fontWeight: 'bold',
               }}>
-              Connect with every application
+              Start using Tasky now!
             </Typography>
             <Typography
+              mt={1}
               component='p'
               sx={{
                 color: '#cccc',
               }}>
-              Everything you need in an easily customizable dashboard.
+              Manage your Tasks in an easy and more efficient way!
             </Typography>
           </Box>
         </Container>

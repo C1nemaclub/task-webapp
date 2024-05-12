@@ -1,7 +1,8 @@
 import { useFormik } from 'formik';
+import { useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import * as yup from 'yup';
-import { useAuthContext } from '../../context/auth/auth-context';
+import { AuthContext } from '../../context/auth/auth-context';
 
 const passwordResetSchema = yup.object().shape({
   password: yup
@@ -23,7 +24,7 @@ const initialValues: PasswordReset = {
 
 const usePasswordConfirmReset = () => {
   const { token } = useParams();
-  const { resetPassword } = useAuthContext();
+  const { resetPassword } = useContext(AuthContext);
 
   const passwordResetForm = useFormik<PasswordReset>({
     initialValues,

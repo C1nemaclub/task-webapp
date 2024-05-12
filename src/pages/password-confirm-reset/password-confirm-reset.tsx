@@ -11,13 +11,14 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
+import { useContext } from 'react';
 import InputField from '../../components/shared/input-field';
+import { AuthContext } from '../../context/auth/auth-context';
 import useToggle from '../../hooks/useToggle';
 import usePasswordConfirmReset from './use-password-confirm-reset';
-import { useAuthContext } from '../../context/auth/auth-context';
 const PasswordConfirmReset = () => {
   const passwordResetForm = usePasswordConfirmReset();
-  const { loading } = useAuthContext();
+  const { loading } = useContext(AuthContext);
   const [showPassword, togglePassword] = useToggle();
   return (
     <>

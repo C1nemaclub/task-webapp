@@ -1,12 +1,12 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { TUser } from '../../core/types/roles.model';
-import pb from '../../libs/pocketbase';
-import { UserSignUp } from '../../pages/sign-up/utils/constants';
-import { UserSignIn } from '../../pages/sign-in/utils/constants';
-import { ToastContext } from '../../context/toast-context.tsx';
-import { messages } from '../../utils/constants.ts';
-import { PasswordReset } from '../../pages/password-confirm-reset/use-password-confirm-reset.tsx';
 import { useNavigate } from 'react-router-dom';
+import { ToastContext } from '../../context/toast-context.tsx';
+import { OAuthResponse, TUser } from '../../core/types/roles.model';
+import pb from '../../libs/pocketbase';
+import { PasswordReset } from '../../pages/password-confirm-reset/use-password-confirm-reset.tsx';
+import { UserSignIn } from '../../pages/sign-in/utils/constants';
+import { UserSignUp } from '../../pages/sign-up/utils/constants';
+import { messages } from '../../utils/constants.ts';
 
 type AuthContextType = {
   user: TUser | null;
@@ -17,9 +17,10 @@ type AuthContextType = {
   forgotPassword: (email: string) => void;
   resetPassword: (data: PasswordReset, token: string) => void;
   getUser: () => void;
+  authWithProvider: (provider: string) => void;
 };
 
-const AuthContext = createContext<AuthContextType>({} as AuthContextType);
+export const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const userFromStorage = pb.authStore.model as TUser;
@@ -45,6 +46,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       toast.openToast({
         severity: 'error',
         message: messages.login.error,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const authWithProvider = async (provider: string) => {
+    try {
+      setLoading(true);
+      const authData = (await pb
+        .collection('users')
+        .authWithOAuth2({ provider })) as OAuthResponse;
+      console.log(authData);
+      setUser(authData.record);
+    } catch (e) {
+      console.log(e, '📷');
+      toast.openToast({
+        severity: 'error',
+        message: messages.register.error,
       });
     } finally {
       setLoading(false);
@@ -91,7 +111,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         .confirmPasswordReset(token, data.password, data.passwordConfirmation);
       toast.openToast({
         severity: 'success',
-        message: 'Password succesfully reseted, please sign in',
+        message: 'Password successfully reseted, please sign in',
       });
       setTimeout(() => {
         if (!oldAuth) {
@@ -142,10 +162,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         resetPassword,
         loading,
         getUser,
+        authWithProvider,
       }}>
       {children}
     </AuthContext.Provider>
   );
 };
-
-export const useAuthContext = () => useContext(AuthContext);

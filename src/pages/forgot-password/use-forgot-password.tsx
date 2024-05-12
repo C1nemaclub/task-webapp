@@ -1,12 +1,13 @@
 import { useFormik } from 'formik';
+import { useContext } from 'react';
+import { AuthContext } from '../../context/auth/auth-context';
 import {
-  initialValues,
   forgotPasswordSchema,
   ForgotPasswordType,
+  initialValues,
 } from './utils/constants';
-import { useAuthContext } from '../../context/auth/auth-context';
 const useForgotPassword = () => {
-  const { forgotPassword } = useAuthContext();
+  const { forgotPassword } = useContext(AuthContext);
 
   const forgotPasswordForm = useFormik({
     initialValues,

@@ -9,19 +9,22 @@ import {
   IconButton,
   InputAdornment,
   Link,
+  Stack,
   Typography,
 } from '@mui/material';
-import { FC } from 'react';
+import GoogleIcon from '@mui/icons-material/Google';
+import GithubIcon from '@mui/icons-material/GitHub';
+import { FC, useContext } from 'react';
 import useSignIn from './useSignIn';
 import useToggle from '../../hooks/useToggle';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import InputField from '../../components/shared/input-field';
-import { useAuthContext } from '../../context/auth/auth-context';
+import { AuthContext } from '../../context/auth/auth-context';
 interface SignInProps {}
 
 const SignIn: FC<SignInProps> = () => {
-  const { loading } = useAuthContext();
+  const { loading, authWithProvider } = useContext(AuthContext);
   const { loginForm } = useSignIn();
   const [showPassword, togglePassword] = useToggle();
   const [rememberMe, , setRememberMe] = useToggle(true);
@@ -110,7 +113,21 @@ const SignIn: FC<SignInProps> = () => {
           </Grid>
         </Grid>
       </Box>
-
+      <Typography component='p'>or</Typography>
+      <Stack direction='row' spacing={4}>
+        <Button
+          startIcon={<GoogleIcon />}
+          variant='outlined'
+          onClick={() => authWithProvider('google')}>
+          Google
+        </Button>
+        <Button
+          startIcon={<GithubIcon />}
+          variant='outlined'
+          onClick={() => authWithProvider('github')}>
+          Github
+        </Button>
+      </Stack>
       <Typography mt='1.5rem'>
         Don't have an account?
         <Link href='/auth/sign-up' ml='1rem' underline='hover'>
