@@ -5,9 +5,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: ['master']
+    branches: ['master', 'dev']
   pull_request:
-    branches: ['master']
+    branches: ['master', 'dev']
 
 jobs:
   build:
@@ -28,12 +28,3 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
       - run: npm test --if-present
-  read_secrets:
-    runs-on: ubuntu-latest
-    env:
-      LocalVar: Hello
-    steps:
-      - name: Print the secret
-        run: echo "the secret is ${{secrets.API_KEY}}"
-      - name: Print the local
-        run: echo "Local Variable is /:/ $LocalVar"
