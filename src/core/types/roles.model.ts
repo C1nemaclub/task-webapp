@@ -95,7 +95,7 @@ export type TUser = {
   collectionId: string;
   collectionName: string;
   verified: boolean;
-  teamId: Team['id'];
+  teamId: Array<Team['id']>;
   roleId: string[];
 };
 

@@ -10,6 +10,7 @@ import {
   ListItemButton,
   ListItemText,
   Tooltip,
+  useTheme,
 } from '@mui/material';
 import { NavLink } from 'react-router-dom';
 import useWindowSize from '../../hooks/use-window-size';
@@ -46,6 +47,9 @@ const categories = [
 ];
 
 const Sidebar = () => {
+  const { palette } = useTheme();
+  const style = { '--primary-main-color': palette.primary.main } as React.CSSProperties;
+
   const {
     windowSize: { width },
     isMobile,
@@ -89,6 +93,7 @@ const Sidebar = () => {
                 <NavLink
                   key={name}
                   to={route}
+                  style={style}
                   className={({ isActive }) => (isActive ? 'active-nav nav' : 'nav')}>
                   {({ isActive }) => {
                     return (

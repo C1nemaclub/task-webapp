@@ -7,6 +7,8 @@ import SignIn from './pages/sign-in/sign-in.tsx';
 import ForgotPassword from './pages/forgot-password/forgot-password.tsx';
 import PasswordConfirmReset from './pages/password-confirm-reset/password-confirm-reset.tsx';
 import SignUp from './pages/sign-up/sign-up.tsx';
+import Teams from './pages/teams/teams.tsx';
+import NewTeam from './pages/new-team/new-team.tsx';
 import { AuthProvider } from './context/auth/auth-context.tsx';
 import { ToastProvider } from './context/toast-context.tsx';
 
@@ -32,7 +34,8 @@ function App() {
                 <Route index element={<Navigate to='/overview/dashboard' />} />
                 <Route path='dashboard' element={<Dashboard />} />
                 <Route path='tasks' element={<h2>Tasks</h2>} />
-                <Route path='teams' element={<h2>Teams</h2>} />
+                <Route path='teams' element={<Teams />} />
+                <Route path='teams/new-team' element={<NewTeam />} />
                 <Route path='settings' element={<h2>Settings</h2>} />
               </Route>
             </Routes>
