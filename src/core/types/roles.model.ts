@@ -84,23 +84,77 @@ export interface GoogleRawUser {
 }
 
 export type TUser = {
+  id: string;
+  username: string;
   avatar: string;
+  name: string;
+  emailVisibility: boolean;
+  created: string;
+  updated: string;
+  email: string;
   collectionId: string;
   collectionName: string;
+  verified: boolean;
+  teamId: Team['id'];
+  roleId: string[];
+};
+
+export type Task = {
+  id: string;
+  dueDate: string;
+  title: string;
+  description: string;
+  updated: string;
   created: string;
-  email: string;
-  emailVisibility: boolean;
+  columnId: Column['id'];
+  asignee: TUser['id'];
+  createdBy: TUser['id'];
+  type: TaskType;
+};
+
+export type TaskType = {
+  id: string;
+  title: string;
+  description: string;
+  color: string;
+  updated: string;
+  created: string;
+};
+
+export type Team = {
   id: string;
   name: string;
   updated: string;
-  username: string;
-  verified: boolean;
+  created: string;
+};
+
+export type Board = {
+  id: string;
+  name: string;
+  teamId: Team['id'];
+  updated: string;
+  created: string;
+};
+
+export type Column = {
+  id: string;
+  name: string;
+  boardId: Board['id'];
+  updated: string;
+  created: string;
 };
 
 export type ProviderMeta = GithubMeta | GoogleMeta;
+
 export type OAuthResponse = {
   meta: ProviderMeta;
   record: TUser;
   token: string;
 };
-export type Role = 'ADMIN' | 'USER';
+
+export type RoleName = 'ADMIN' | 'USER';
+
+export type Role = {
+  id: string;
+  name: RoleName;
+};

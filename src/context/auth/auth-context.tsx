@@ -111,7 +111,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         .confirmPasswordReset(token, data.password, data.passwordConfirmation);
       toast.openToast({
         severity: 'success',
-        message: 'Password successfully reseted, please sign in',
+        message: 'Password successfully reset, please sign in',
       });
       setTimeout(() => {
         if (!oldAuth) {

@@ -1,12 +1,22 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../context/auth/auth-context';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../store/store';
+import { getTasks } from '../../core/features/tasks/taskSlicer';
+import { IMAGE_BASE_URL } from '../../utils/constants';
 
 const Dashboard = () => {
   const { logOut, user } = useContext(AuthContext);
-  console.log(user, 'Dashboard');
+  const dispatch = useDispatch<AppDispatch>();
+  const tasks = useSelector((state: RootState) => state.tasks.tasks);
+  console.log(tasks);
 
-  const avatarSrc = `http://127.0.0.1:8090/api/files/_pb_users_auth_/${user?.id}/${user?.avatar}`;
+  useEffect(() => {
+    dispatch(getTasks());
+  }, [dispatch]);
+
+  const avatarSrc = `${IMAGE_BASE_URL}${user?.id}/${user?.avatar}`;
 
   return (
     <div>
@@ -15,8 +25,6 @@ const Dashboard = () => {
         <h1>{user?.email}</h1>
         <button onClick={logOut}>Logout</button>
         <img src={avatarSrc} width='400px' />
-        <Link to='tasks'>Tasks</Link>
-        <h1>Her</h1>
       </div>
     </div>
   );

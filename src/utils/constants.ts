@@ -8,3 +8,5 @@ export const messages = {
       'Sorry, we couldn`t process your registration. Double-check your details and try again.',
   },
 };
+
+export const IMAGE_BASE_URL = 'http://localhost:8080/api/files/_pb_users_auth_/';
