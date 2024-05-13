@@ -1,9 +1,8 @@
 import { useContext, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { AuthContext } from '../../context/auth/auth-context';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../store/store';
+import { AuthContext } from '../../context/auth/auth-context';
 import { getTasks } from '../../core/features/tasks/taskSlicer';
+import { AppDispatch, RootState } from '../../store/store';
 import { IMAGE_BASE_URL } from '../../utils/constants';
 
 const Dashboard = () => {
