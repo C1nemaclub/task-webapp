@@ -29,7 +29,7 @@ function TabPanel(props: TabPanelProps) {
 const Teams = () => {
   const [value, setValue] = React.useState(1);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+  const handleChange = (_: React.SyntheticEvent, newValue: string) => {
     setValue(Number(newValue));
   };
 

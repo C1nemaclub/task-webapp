@@ -1,8 +1,7 @@
-import React from 'react';
-import useNewTeam from './use-new-team';
-import CustomButton from '../../components/shared/CustomButton';
 import { Box, Grid, Stack, Typography } from '@mui/material';
+import CustomButton from '../../components/shared/CustomButton';
 import InputField from '../../components/shared/input-field';
+import useNewTeam from './use-new-team';
 
 const NewTeam = () => {
   const { newTeamForm } = useNewTeam();
