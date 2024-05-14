@@ -9,4 +9,4 @@ export const messages = {
   },
 };
 
-export const IMAGE_BASE_URL = 'http://127.0.0.1:8090/api/files/_pb_users_auth_/';
+export const IMAGE_BASE_URL = `${import.meta.env.VITE_API_URL}api/files/_pb_users_auth_/`;
