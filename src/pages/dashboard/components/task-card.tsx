@@ -1,6 +1,6 @@
-import React, { FC } from 'react';
-import { Task } from '../../../core/types/roles.model';
 import { Box, Card, Chip, Stack, Typography } from '@mui/material';
+import { FC } from 'react';
+import { Task } from '../../../core/types/roles.model';
 
 type TaskCardProps = {
   task: Task;
