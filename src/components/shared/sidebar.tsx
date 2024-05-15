@@ -15,7 +15,9 @@ import {
 import { NavLink } from 'react-router-dom';
 import useWindowSize from '../../hooks/use-window-size';
 import Logo from './logo';
-
+import LogoutIcon from '@mui/icons-material/Logout';
+import { useContext } from 'react';
+import { AuthContext } from '../../context/auth/auth-context';
 const drawerWidth = 240;
 
 const drawerStyle = {
@@ -47,6 +49,7 @@ const categories = [
 ];
 
 const Sidebar = () => {
+  const { logOut } = useContext(AuthContext);
   const { palette } = useTheme();
   const style = { '--primary-main-color': palette.primary.main } as React.CSSProperties;
 
@@ -85,6 +88,8 @@ const Sidebar = () => {
         sx={{
           marginTop: '1rem',
           overflow: 'hidden',
+          display: 'flex',
+          flexDirection: 'column',
         }}>
         {categories.map(({ name, id, route, Icon }) => {
           if (width > 800) {
@@ -131,6 +136,7 @@ const Sidebar = () => {
               </ListItem>
             );
           }
+
           return (
             <NavLink
               key={name}
@@ -143,6 +149,7 @@ const Sidebar = () => {
                   <ListItemButton
                     disableRipple
                     sx={{
+                      padding: 0,
                       display: 'flex',
                       width: '100%',
                       justifyContent: 'center',
@@ -164,6 +171,28 @@ const Sidebar = () => {
             </NavLink>
           );
         })}
+        <ListItem>
+          <ListItemButton
+            onClick={logOut}
+            disableRipple
+            sx={{
+              padding: 0,
+              display: 'flex',
+              justifyContent: 'space-between',
+              width: '100%',
+            }}>
+            <IconButton>
+              <Tooltip title={'Logout'} enterDelay={100}>
+                <LogoutIcon
+                  sx={{
+                    transition: '.5s ease-in-out',
+                  }}
+                />
+              </Tooltip>
+            </IconButton>
+            <ListItemText secondary={'Logout'} />
+          </ListItemButton>
+        </ListItem>
       </List>
     </Drawer>
   );

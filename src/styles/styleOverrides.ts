@@ -21,6 +21,20 @@ export const theme = createTheme({
       // secondary: '#fff',
       disabled: '#00ff00',
     },
+    secondary: {
+      main: '#ffcc80',
+      // pick shades of orange
+      '50': '#fff3e0',
+      '100': '#ffe0b2',
+      '200': '#ffcc80',
+      '300': '#ffb74d',
+      '400': '#ffa726',
+      '500': '#ff9800',
+      '600': '#fb8c00',
+      '700': '#f57c00',
+      '800': '#ef6c00',
+      '900': '#e65100',
+    },
   },
   components: {
     MuiTypography: {
@@ -60,6 +74,17 @@ export const theme = createTheme({
           cursor: 'pointer',
           color: 'blue',
         },
+      },
+    },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          borderRadius: '4px',
+        },
+        colorSecondary: ({ theme }) => ({
+          backgroundColor: theme.palette.secondary['200' as keyof PaletteColor],
+          color: theme.palette.secondary['900' as keyof PaletteColor],
+        }),
       },
     },
     MuiContainer: {

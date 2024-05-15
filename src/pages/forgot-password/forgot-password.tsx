@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import useForgotPassword from './use-forgot-password';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import { Link as RouterLink } from 'react-router-dom';
 
 const ForgotPassword = () => {
   const { forgotPasswordForm } = useForgotPassword();
@@ -58,7 +59,7 @@ const ForgotPassword = () => {
       </Box>
       <Typography mt='1.5rem' textAlign='center'>
         Already have an Account?
-        <Link href='/auth/sign-in' ml='1rem' underline='hover'>
+        <Link component={RouterLink} to='/auth/sign-in' ml='1rem' underline='hover'>
           Sign In
         </Link>
       </Typography>

@@ -22,6 +22,8 @@ import Logo from '../../components/shared/logo';
 import { AuthContext } from '../../context/auth/auth-context';
 import useToggle from '../../hooks/useToggle';
 import useSignIn from './useSignIn';
+import { Link as RouterLink } from 'react-router-dom';
+
 interface SignInProps {}
 
 const SignIn: FC<SignInProps> = () => {
@@ -98,7 +100,9 @@ const SignIn: FC<SignInProps> = () => {
                 }
                 label='Remember me'
               />
-              <Link href='/auth/forgot-password'>Forgot Password?</Link>
+              <Link component={RouterLink} to='/auth/forgot-password'>
+                Forgot Password?
+              </Link>
             </Box>
           </Grid>
           <Grid item xs={12} mt={2}>
@@ -131,7 +135,7 @@ const SignIn: FC<SignInProps> = () => {
       </Stack>
       <Typography mt='1.5rem'>
         Don't have an account?
-        <Link href='/auth/sign-up' ml='1rem' underline='hover'>
+        <Link component={RouterLink} to='/auth/sign-up' ml='1rem' underline='hover'>
           Create an account
         </Link>
       </Typography>

@@ -20,6 +20,8 @@ import useSignUp from './useSignUp';
 import Logo from '../../components/shared/logo';
 import InputField from '../../components/shared/input-field';
 import BadgeIcon from '@mui/icons-material/Badge';
+import { Link as RouterLink } from 'react-router-dom';
+
 interface SignUpProps {}
 
 const SignUp: FC<SignUpProps> = () => {
@@ -171,7 +173,7 @@ const SignUp: FC<SignUpProps> = () => {
       </Box>
       <Typography mt='1.5rem'>
         Already have an Account?
-        <Link href='/auth/sign-in' ml='1rem' underline='hover'>
+        <Link component={RouterLink} to='/auth/sign-in' ml='1rem' underline='hover'>
           Sign In
         </Link>
       </Typography>
