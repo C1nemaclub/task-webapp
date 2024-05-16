@@ -83,6 +83,22 @@ export interface GoogleRawUser {
   verified_email: boolean;
 }
 
+// export type TUser = {
+//   id: string;
+//   username: string;
+//   avatar: string;
+//   name: string;
+//   emailVisibility: boolean;
+//   created: string;
+//   updated: string;
+//   email: string;
+//   collectionId: string;
+//   collectionName: string;
+//   verified: boolean;
+//   teamId: Array<Team['id']>;
+//   roleId: string[];
+// };
+
 export type TUser = {
   id: string;
   username: string;
@@ -97,6 +113,10 @@ export type TUser = {
   verified: boolean;
   teamId: Array<Team['id']>;
   roleId: string[];
+  expand: {
+    teamId: Team[];
+    roleId: Role[];
+  };
 };
 
 export type Task = {
