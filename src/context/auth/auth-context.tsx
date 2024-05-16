@@ -38,7 +38,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const logIn = async (data: UserSignIn) => {
     try {
       setLoading(true);
-      await pb.collection('users').authWithPassword(data.email, data.password);
+      await pb
+        .collection('users')
+        .authWithPassword(data.email, data.password, { expand: 'teamId,roleId' });
       const user = pb.authStore.model as TUser;
       setUser(user);
     } catch (e) {
@@ -137,16 +139,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const getUser = async () => {
     try {
-      // pb.authStore.isValid &&
-      //   (await pb.collection('users').authRefresh({ expand: 'teamId,roleId' }));
-      // console.log(pb.authStore.model, 'REFRESH');
-      if (pb.authStore.isValid) {
-        const loggedUser = await pb
-          .collection('users')
-          .getOne<TUser>(pb.authStore.model?.id as string, { expand: 'teamId,roleId' });
-        console.log(loggedUser, 'LOGGED USER');
-        setUser(loggedUser);
-      }
+      pb.authStore.isValid &&
+        (await pb.collection('users').authRefresh({ expand: 'teamId,roleId' }));
+      setUser(pb.authStore.model as TUser);
+      // if (pb.authStore.isValid) {
+      //   const loggedUser = await pb
+      //     .collection('users')
+      //     .getOne<TUser>(pb.authStore.model?.id as string, { expand: 'teamId,roleId' });
+      //   console.log(loggedUser, 'LOGGED USER');
+      //   setUser(loggedUser);
+      // }
     } catch (e) {
       console.log(e);
     }
