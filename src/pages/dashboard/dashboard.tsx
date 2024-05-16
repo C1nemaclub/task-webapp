@@ -22,6 +22,7 @@ const Dashboard = () => {
   }, [dispatch]);
 
   const avatarSrc = `${IMAGE_BASE_URL}${user?.id}/${user?.avatar}`;
+  console.log(user, 'HERE');
   // console.log(user?.expand.teamId, 'USER');
 
   //@ts-expect-error - Fix this
