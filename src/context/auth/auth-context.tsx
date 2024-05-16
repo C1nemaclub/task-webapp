@@ -137,13 +137,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const getUser = async () => {
     try {
-      pb.authStore.isValid &&
-        (await pb.collection('users').authRefresh({ expand: 'teamId,roleId' }));
-      console.log(
-        await pb.collection('users').authRefresh({ expand: 'teamId,roleId' }),
-        'XD'
-      );
-      setUser(pb.authStore.model as TUser);
+      // pb.authStore.isValid &&
+      //   (await pb.collection('users').authRefresh({ expand: 'teamId,roleId' }));
+      // console.log(pb.authStore.model, 'REFRESH');
+      if (pb.authStore.isValid) {
+        const loggedUser = await pb
+          .collection('users')
+          .getOne<TUser>(pb.authStore.model?.id as string, { expand: 'teamId,roleId' });
+        console.log(loggedUser, 'LOGGED USER');
+        setUser(loggedUser);
+      }
     } catch (e) {
       console.log(e);
     }

@@ -22,9 +22,9 @@ const Dashboard = () => {
   }, [dispatch]);
 
   const avatarSrc = `${IMAGE_BASE_URL}${user?.id}/${user?.avatar}`;
+  console.log(user, 'HERE');
   // console.log(user?.expand.teamId, 'USER');
 
-  //@ts-expect-error - Fix this
   const userTeams = user?.expand.teamId as Team[];
   const userHasTeam = user?.teamId && user.teamId.length > 0;
   const hasTeamSelected = teamIndex !== 0;
