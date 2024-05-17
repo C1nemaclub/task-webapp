@@ -24,7 +24,7 @@ export const initialValues: NewTeam = {
 
 const useNewTeam = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { user } = useContext(AuthContext);
+  const { user, setUser } = useContext(AuthContext);
 
   const newTeamForm = useFormik({
     initialValues,
@@ -36,18 +36,20 @@ const useNewTeam = () => {
   async function handleSubmit(payload: NewTeam) {
     const res = await dispatch(createTeam(payload.teamName));
     const createdTeam = res.payload as Team;
-    console.log(createdTeam, 'created Team');
     if (user && createdTeam) {
       joinTeam(createdTeam.id, user);
     }
   }
 
   const joinTeam = async (teamId: string, user: TUser) => {
-    console.log(teamId, user.id);
-    const res = await pb.collection('users').update(user.id, {
-      teamId: [...user.teamId, teamId],
-    });
-    console.log(res, 'RES JOIN TEAM');
+    const res = await pb.collection('users').update<TUser>(
+      user.id,
+      {
+        teamId: [...user.teamId, teamId],
+      },
+      { expand: 'teamId, roleId' }
+    );
+    setUser(res);
   };
 
   return { newTeamForm };

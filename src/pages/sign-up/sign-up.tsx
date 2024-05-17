@@ -29,6 +29,8 @@ const SignUp: FC<SignUpProps> = () => {
   const { loading } = useContext(AuthContext);
   const [showPassword, togglePassword] = useToggle();
 
+  console.log(registerForm.errors, 'HERE');
+
   return (
     <>
       <Logo title='Tasky' />

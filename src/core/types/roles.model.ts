@@ -129,12 +129,16 @@ export type Task = {
   columnId: Column['id'];
   asignee: TUser['id'];
   createdBy: TUser['id'];
-  type: TaskType;
+  type: TaskType['id'];
+  expand: {
+    asignee: TUser;
+    type: TaskType;
+  };
 };
 
 export type TaskType = {
   id: string;
-  title: string;
+  name: string;
   description: string;
   color: string;
   updated: string;
@@ -176,5 +180,10 @@ export type RoleName = 'ADMIN' | 'USER';
 
 export type Role = {
   id: string;
-  name: RoleName;
+  title: RoleName;
+};
+
+export const ROLES: { [key in RoleName]: string } = {
+  ADMIN: '7bm4gb04xgfn4b8',
+  USER: 'h8q0ffpkng5aobv',
 };
