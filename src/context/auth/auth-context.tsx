@@ -7,6 +7,7 @@ import { PasswordReset } from '../../pages/password-confirm-reset/use-password-c
 import { UserSignIn } from '../../pages/sign-in/utils/constants';
 import { UserSignUp } from '../../pages/sign-up/utils/constants';
 import { messages } from '../../utils/constants.ts';
+import { ROLES } from '../../core/types/roles.model';
 
 type AuthContextType = {
   user: TUser | null;
@@ -18,6 +19,7 @@ type AuthContextType = {
   resetPassword: (data: PasswordReset, token: string) => void;
   getUser: () => void;
   authWithProvider: (provider: string) => void;
+  setUser: React.Dispatch<React.SetStateAction<TUser | null>>;
 };
 
 export const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -83,6 +85,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       payload.append('password', data.password);
       payload.append('passwordConfirm', data.passwordConfirmation);
       payload.append('name', data.name);
+      payload.append('roleId', ROLES.USER);
       if (data.avatar) {
         payload.append('avatar', data.avatar);
       }
@@ -169,6 +172,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         resetPassword,
         loading,
         getUser,
+        setUser,
         authWithProvider,
       }}>
       {children}

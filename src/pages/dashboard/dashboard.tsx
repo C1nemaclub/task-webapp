@@ -1,7 +1,7 @@
-import { Box, Chip, Typography } from '@mui/material';
+import { Box, Chip, Link, Paper, Typography } from '@mui/material';
 import { useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { AuthContext } from '../../context/auth/auth-context';
 import { AppDispatch, RootState } from '../../store/store';
 import { IMAGE_BASE_URL } from '../../utils/constants';
@@ -28,7 +28,15 @@ const Dashboard = () => {
   const hasTeamSelected = teamIndex !== 0;
 
   return (
-    <Box>
+    <Box
+      width='100%'
+      sx={{
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1rem',
+        padding: '1rem',
+      }}>
       <Typography variant='h5'>Dashboard</Typography>
       <div>
         {userHasTeam && !hasTeamSelected && (
@@ -36,10 +44,26 @@ const Dashboard = () => {
         )}
 
         {!userHasTeam && (
-          <Typography>
-            You don't belong to a team yet
-            <Link to='/overview/teams/new-team'>Create one Here</Link>
-          </Typography>
+          <Paper
+            elevation={3}
+            sx={{
+              padding: '2rem',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '.5rem',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginTop: '4rem',
+              maxWidth: '600px',
+              marginX: 'auto',
+            }}>
+            <Typography paragraph textAlign='center' m={0}>
+              You don't belong to a team yet
+              <Link component={RouterLink} to='/overview/teams/new-team' ml={2}>
+                Create one here
+              </Link>
+            </Typography>
+          </Paper>
         )}
 
         {userHasTeam && hasTeamSelected && (

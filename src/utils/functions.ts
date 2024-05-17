@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import { GithubMeta, GoogleMeta, ProviderMeta } from '../core/types/roles.model';
 
 const validFileExtensions = { image: ['jpg', 'gif', 'png', 'jpeg', 'svg', 'webp'] };
@@ -18,4 +19,8 @@ export const isGithubUser = (user: ProviderMeta): user is GithubMeta => {
 
 export const isGoogleUser = (user: ProviderMeta): user is GoogleMeta => {
   return (user as GoogleMeta).rawUser.locale !== undefined;
+};
+
+export const formatDate = (date: string) => {
+  return format(new Date(date), 'dd/MM/yyyy');
 };

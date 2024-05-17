@@ -17,7 +17,7 @@ const UserLayout = () => {
         height: '100%',
       }}>
       <Sidebar />
-      <Box component='main' p={3}>
+      <Box component='main' p={3} width='100%'>
         <Outlet />
       </Box>
     </Box>
