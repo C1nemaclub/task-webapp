@@ -5,12 +5,14 @@ import { ClientResponseError } from 'pocketbase';
 
 export type TaskState = {
   tasks: Task[];
+  teamTasks: Task[];
   loading: boolean;
   error: string | null;
 };
 
 const initialState: TaskState = {
   tasks: [],
+  teamTasks: [],
   loading: false,
   error: null,
 };
@@ -25,6 +27,20 @@ export const getTasks = createAsyncThunk('task/getTasks', async (_, thunkAPI) =>
     return thunkAPI.rejectWithValue(error.message);
   }
 });
+
+export const getTasksByTeamId = createAsyncThunk(
+  'task/getTasksByTeamId',
+  async (teamId: string, thunkAPI) => {
+    try {
+      const response = await service.getTasksByTeamId(teamId);
+      return response;
+    } catch (e) {
+      console.log(e);
+      const error = e as ClientResponseError;
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
 
 export const taskSlice = createSlice({
   name: 'task',
@@ -42,6 +58,17 @@ export const taskSlice = createSlice({
         state.loading = false;
       })
       .addCase(getTasks.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(getTasksByTeamId.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getTasksByTeamId.fulfilled, (state, action: PayloadAction<Task[]>) => {
+        state.teamTasks = action.payload;
+        state.loading = false;
+      })
+      .addCase(getTasksByTeamId.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

@@ -133,6 +133,7 @@ export type Task = {
   expand: {
     asignee: TUser;
     type: TaskType;
+    column: Column
   };
 };
 

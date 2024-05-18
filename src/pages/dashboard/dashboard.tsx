@@ -1,5 +1,5 @@
 import { Box, Chip, Link, Paper, Typography } from '@mui/material';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 import { AuthContext } from '../../context/auth/auth-context';
@@ -8,24 +8,43 @@ import { IMAGE_BASE_URL } from '../../utils/constants';
 import { useLocalStorage } from '@uidotdev/usehooks';
 import SelectTeamCard from './components/select-team-card';
 import { Team } from '../../core/types/roles.model';
-import { getTasks } from '../../core/features/tasks/taskSlicer';
+import { getTasks, getTasksByTeamId } from '../../core/features/tasks/taskSlicer';
 import TaskCard from './components/task-card';
+import pb from '../../libs/pocketbase';
 
 const Dashboard = () => {
   const { user } = useContext(AuthContext);
   const dispatch = useDispatch<AppDispatch>();
-  const tasks = useSelector((state: RootState) => state.tasks.tasks);
-  const [teamIndex, setTeamIndex] = useLocalStorage('defaultTeam', 0);
+  const taskState = useSelector((state: RootState) => state.tasks);
+
+  const [activeTeam, setActiveTeam] = useLocalStorage('defaultTeam', '');
+  const [myTeams, setMyTeams] = useState<Team[]>([]);
+
+  const { teamTasks } = taskState;
+  console.log(teamTasks);
 
   useEffect(() => {
     dispatch(getTasks());
-  }, [dispatch]);
+    (async () => {
+      const teamsFilterQuery = user?.teamId.map((id) => `id="${id}"`).join('||');
+      const teamsResponse = await pb.collection('teams').getFullList<Team>({
+        filter: teamsFilterQuery,
+      });
+      setMyTeams(teamsResponse);
+    })();
+  }, [dispatch, user]);
+
+  useEffect(() => {
+    dispatch(getTasksByTeamId(activeTeam));
+  }, [activeTeam, dispatch]);
 
   const avatarSrc = `${IMAGE_BASE_URL}${user?.id}/${user?.avatar}`;
-  console.log(user, 'HERE');
   const userTeams = user?.expand.teamId as Team[];
-  const userHasTeam = user?.teamId && user.teamId.length > 0;
-  const hasTeamSelected = teamIndex !== 0;
+  // const userHasTeam = user?.teamId && user.teamId.length > 0;
+  const userHasTeam = myTeams.length > 0;
+  const hasTeamSelected = activeTeam !== '';
+
+  const currentTeam = userTeams.find((team) => team.id === activeTeam);
 
   return (
     <Box
@@ -40,7 +59,7 @@ const Dashboard = () => {
       <Typography variant='h5'>Dashboard</Typography>
       <div>
         {userHasTeam && !hasTeamSelected && (
-          <SelectTeamCard teams={userTeams} selectTeam={setTeamIndex} />
+          <SelectTeamCard teams={userTeams} selectTeam={setActiveTeam} />
         )}
 
         {!userHasTeam && (
@@ -68,14 +87,13 @@ const Dashboard = () => {
 
         {userHasTeam && hasTeamSelected && (
           <>
-            <Chip label={userTeams[teamIndex - 1].name} color='secondary' />
-            <h1>{user?.email}</h1>
-            <img src={avatarSrc} width='400px' />
-            {tasks.map((task) => {
+            <Chip label={currentTeam && currentTeam.name} color='secondary' />
+            {teamTasks.map((task) => {
               return <TaskCard key={task.id} task={task} />;
             })}
           </>
         )}
+        <img src={avatarSrc} width='400px' />
       </div>
     </Box>
   );

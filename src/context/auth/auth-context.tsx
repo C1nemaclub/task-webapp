@@ -25,8 +25,8 @@ type AuthContextType = {
 export const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const userFromStorage = pb.authStore.model as TUser;
-  const [user, setUser] = useState<TUser | null>(userFromStorage || null);
+  // const userFromStorage = pb.authStore.isValid && (pb.authStore.model as TUser);
+  const [user, setUser] = useState<TUser | null>(null);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const toast = useContext(ToastContext);
@@ -59,9 +59,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const authWithProvider = async (provider: string) => {
     try {
       setLoading(true);
-      const authData = (await pb
-        .collection('users')
-        .authWithOAuth2({ provider })) as OAuthResponse;
+      const authData = (await pb.collection('users').authWithOAuth2({
+        provider,
+        query: { expand: 'teamId,roleId' },
+      })) as OAuthResponse;
       console.log(authData);
       setUser(authData.record);
     } catch (e) {

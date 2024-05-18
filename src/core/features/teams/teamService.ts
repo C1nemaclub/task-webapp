@@ -5,8 +5,8 @@ export const getTeams = async () => {
   return await pb.collection('teams').getFullList<Team>();
 };
 
-// const getTeamsByUser = (userId: string, start: number = 0, end: number = 10) => {
-//   return await pb.collection('teams').getList<Team>(start, end, { expand: {} });
+// const getTeamsByUser = async (teamIds: string[]) => {
+//   return await pb.collection('teams').getFullList<Team>({ filter: '' });
 // };
 
 export const createTeam = async (teamName: string) => {
@@ -14,7 +14,3 @@ export const createTeam = async (teamName: string) => {
     name: teamName,
   });
 };
-
-// export const joinTeam = async (teamId: string, userId: string) => {
-
-// };

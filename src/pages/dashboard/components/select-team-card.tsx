@@ -5,7 +5,7 @@ import { Team } from '../../../core/types/roles.model';
 
 type SelectTeamCardProps = {
   teams: Team[];
-  selectTeam: (teamIndex: number) => void;
+  selectTeam: (teamIndex: string) => void;
 };
 
 const SelectTeamCard: FC<SelectTeamCardProps> = ({ teams, selectTeam }) => {
@@ -26,8 +26,8 @@ const SelectTeamCard: FC<SelectTeamCardProps> = ({ teams, selectTeam }) => {
         You currently belong to the following teams, please select one to start
       </Typography>
       <Stack direction='row' spacing={2}>
-        {teams.map((team, i) => (
-          <CustomButton key={team.id} onClick={() => selectTeam(i + 1)}>
+        {teams.map((team) => (
+          <CustomButton key={team.id} onClick={() => selectTeam(team.id)}>
             {team.name}
           </CustomButton>
         ))}

@@ -8,3 +8,10 @@ export const getTasks = async () => {
   //   expand: 'asignee',
   // });
 };
+
+export const getTasksByTeamId = async (teamId: string) => {
+  return await pb.collection('ProTasks').getFullList<Task>({
+    filter: `teamId = "${teamId}"`,
+    expand: 'type,asignee,column',
+  });
+};

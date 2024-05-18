@@ -1,5 +1,6 @@
 import { format } from 'date-fns';
-import { GithubMeta, GoogleMeta, ProviderMeta } from '../core/types/roles.model';
+import { GithubMeta, GoogleMeta, ProviderMeta, TUser } from '../core/types/roles.model';
+import { IMAGE_BASE_URL } from './constants';
 
 const validFileExtensions = { image: ['jpg', 'gif', 'png', 'jpeg', 'svg', 'webp'] };
 
@@ -23,4 +24,11 @@ export const isGoogleUser = (user: ProviderMeta): user is GoogleMeta => {
 
 export const formatDate = (date: string) => {
   return format(new Date(date), 'dd/MM/yyyy');
+};
+
+export const isUserValid = (user: TUser) => {
+  if (typeof user.expand === 'undefined') {
+    return false;
+  }
+  return true;
 };
