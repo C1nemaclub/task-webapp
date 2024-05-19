@@ -1,36 +1,45 @@
-import { Box, Chip, Link, Paper, Typography } from '@mui/material';
+import { Box, Chip, Link, Paper, Stack, Typography } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 import { AuthContext } from '../../context/auth/auth-context';
 import { AppDispatch, RootState } from '../../store/store';
-import { IMAGE_BASE_URL } from '../../utils/constants';
+import {
+  ColumnKey,
+  // columnMapper,
+  ColumnMapperKeys,
+  IMAGE_BASE_URL,
+} from '../../utils/constants';
 import { useLocalStorage } from '@uidotdev/usehooks';
 import SelectTeamCard from './components/select-team-card';
 import { Team } from '../../core/types/roles.model';
 import { getTasks, getTasksByTeamId } from '../../core/features/tasks/taskSlicer';
 import TaskCard from './components/task-card';
 import pb from '../../libs/pocketbase';
+import { GroupedTasks } from './utils/constants';
+import TaskColumn from './components/task-column';
 
 const Dashboard = () => {
   const { user } = useContext(AuthContext);
   const dispatch = useDispatch<AppDispatch>();
   const taskState = useSelector((state: RootState) => state.tasks);
+  const [loadingTeams, setLoadingTeams] = useState(true);
 
   const [activeTeam, setActiveTeam] = useLocalStorage('defaultTeam', '');
   const [myTeams, setMyTeams] = useState<Team[]>([]);
 
   const { teamTasks } = taskState;
-  console.log(teamTasks);
 
   useEffect(() => {
     dispatch(getTasks());
     (async () => {
+      setLoadingTeams(true);
       const teamsFilterQuery = user?.teamId.map((id) => `id="${id}"`).join('||');
       const teamsResponse = await pb.collection('teams').getFullList<Team>({
         filter: teamsFilterQuery,
       });
       setMyTeams(teamsResponse);
+      setLoadingTeams(false);
     })();
   }, [dispatch, user]);
 
@@ -45,6 +54,20 @@ const Dashboard = () => {
   const hasTeamSelected = activeTeam !== '';
 
   const currentTeam = userTeams.find((team) => team.id === activeTeam);
+  // console.log(teamTasks);
+
+  const groupedTasks = teamTasks.reduce((acc, current) => {
+    const columnName = current.expand.column.name;
+    if (!acc[columnName]) {
+      acc[columnName] = [];
+    }
+    acc[columnName].push(current);
+    return acc;
+  }, {} as GroupedTasks);
+
+  if (loadingTeams) return <Typography variant='h1'>Loading...</Typography>;
+
+  console.log(groupedTasks);
 
   return (
     <Box
@@ -57,7 +80,7 @@ const Dashboard = () => {
         padding: '1rem',
       }}>
       <Typography variant='h5'>Dashboard</Typography>
-      <div>
+      <Box>
         {userHasTeam && !hasTeamSelected && (
           <SelectTeamCard teams={userTeams} selectTeam={setActiveTeam} />
         )}
@@ -88,13 +111,16 @@ const Dashboard = () => {
         {userHasTeam && hasTeamSelected && (
           <>
             <Chip label={currentTeam && currentTeam.name} color='secondary' />
-            {teamTasks.map((task) => {
-              return <TaskCard key={task.id} task={task} />;
-            })}
+            <TaskColumn />
+            <Stack mt={2}>
+              {teamTasks.map((task) => {
+                return <TaskCard key={task.id} task={task} />;
+              })}
+            </Stack>
           </>
         )}
         <img src={avatarSrc} width='400px' />
-      </div>
+      </Box>
     </Box>
   );
 };

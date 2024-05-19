@@ -83,6 +83,7 @@ const Sidebar = () => {
           variant: 'h5',
           fontWeight: 'bold',
         }}
+        stackProps={{ justifyContent: 'center' }}
       />
       <List
         sx={{

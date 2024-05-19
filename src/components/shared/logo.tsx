@@ -1,20 +1,27 @@
-import { Box, Stack, Typography, TypographyProps } from '@mui/material';
+import { Box, Stack, StackProps, Typography, TypographyProps } from '@mui/material';
 import LogoImage from '../../assets/task.svg';
 
 type LogoProps = {
   title?: string;
   textProps?: TypographyProps;
+  stackProps?: StackProps;
 };
 
-const Logo = ({ title, textProps }: LogoProps) => {
+const Logo = ({ title, textProps, stackProps }: LogoProps) => {
   return (
     <>
-      <Stack spacing={2} direction='row' justifyContent='start' width='100%' mb={1}>
+      <Stack
+        spacing={2}
+        direction='row'
+        justifyContent='start'
+        width='100%'
+        mb={1}
+        {...stackProps}>
         <Box
           component='img'
           sx={{
             height: '100%',
-            width: 80,
+            width: 40,
           }}
           alt='Tasky logo'
           src={LogoImage}

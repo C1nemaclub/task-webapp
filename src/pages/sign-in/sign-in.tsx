@@ -34,7 +34,7 @@ const SignIn: FC<SignInProps> = () => {
 
   return (
     <>
-      <Logo title='Tasky' />
+      <Logo title='Tasky' stackProps={{ justifyContent: 'start' }} />
       <Typography component='h2' variant='h5' fontWeight='bold' alignSelf='start'>
         Log in to your Account
       </Typography>
