@@ -1,23 +1,18 @@
 import { Box, Chip, Link, Paper, Stack, Typography } from '@mui/material';
+import { useLocalStorage } from '@uidotdev/usehooks';
 import { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 import { AuthContext } from '../../context/auth/auth-context';
-import { AppDispatch, RootState } from '../../store/store';
-import {
-  ColumnKey,
-  // columnMapper,
-  ColumnMapperKeys,
-  IMAGE_BASE_URL,
-} from '../../utils/constants';
-import { useLocalStorage } from '@uidotdev/usehooks';
-import SelectTeamCard from './components/select-team-card';
-import { Team } from '../../core/types/roles.model';
 import { getTasks, getTasksByTeamId } from '../../core/features/tasks/taskSlicer';
-import TaskCard from './components/task-card';
+import { Task, Team } from '../../core/types/roles.model';
 import pb from '../../libs/pocketbase';
-import { GroupedTasks } from './utils/constants';
+import { AppDispatch, RootState } from '../../store/store';
+import { IMAGE_BASE_URL } from '../../utils/constants';
+import SelectTeamCard from './components/select-team-card';
 import TaskColumn from './components/task-column';
+import { GroupedTasks } from './utils/constants';
+import { TeamState } from '../../core/features/teams/teamSlicer';
 
 const Dashboard = () => {
   const { user } = useContext(AuthContext);
@@ -56,6 +51,7 @@ const Dashboard = () => {
   const currentTeam = userTeams.find((team) => team.id === activeTeam);
   // console.log(teamTasks);
 
+  console.log(teamTasks);
   const groupedTasks = teamTasks.reduce((acc, current) => {
     const columnName = current.expand.column.name;
     if (!acc[columnName]) {
@@ -66,8 +62,6 @@ const Dashboard = () => {
   }, {} as GroupedTasks);
 
   if (loadingTeams) return <Typography variant='h1'>Loading...</Typography>;
-
-  console.log(groupedTasks);
 
   return (
     <Box
@@ -111,10 +105,15 @@ const Dashboard = () => {
         {userHasTeam && hasTeamSelected && (
           <>
             <Chip label={currentTeam && currentTeam.name} color='secondary' />
-            <TaskColumn />
-            <Stack mt={2}>
-              {teamTasks.map((task) => {
-                return <TaskCard key={task.id} task={task} />;
+            <Stack
+              spacing={2}
+              mt={3}
+              justifyContent={{ xs: 'center', md: 'space-between' }}
+              alignItems={{ xs: 'center', md: 'flex-start' }}
+              direction={{ xs: 'column', md: 'row' }}>
+              {Object.entries(groupedTasks).map((group) => {
+                const [column, tasks] = group as [string, Task[]];
+                return <TaskColumn column={column} tasks={tasks} key={column} />;
               })}
             </Stack>
           </>
