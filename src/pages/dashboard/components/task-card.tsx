@@ -16,6 +16,7 @@ import { FC } from 'react';
 import { Task } from '../../../core/types/roles.model';
 import { IMAGE_BASE_URL } from '../../../utils/constants';
 import { formatDate } from '../../../utils/functions';
+import { useDraggable } from '@dnd-kit/core';
 
 type TaskCardProps = {
   task: Task;
@@ -24,8 +25,24 @@ type TaskCardProps = {
 const TaskCard: FC<TaskCardProps> = ({ task }) => {
   const user = task.expand.asignee;
   const type = task.expand.type;
+
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+    id: task.id,
+  });
+
   return (
-    <Box mb={2} width='100%'>
+    <Box
+      mb={2}
+      width='100%'
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      sx={{
+        cursor: 'pointer',
+        transform: transform
+          ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
+          : undefined,
+      }}>
       <Stack direction='row' justifyContent='space-between' mb={1}>
         <Chip
           label={task.expand.type.name}
@@ -46,6 +63,7 @@ const TaskCard: FC<TaskCardProps> = ({ task }) => {
         </Stack>
       </Stack>
       <Card
+        // style={style}
         sx={{
           padding: '1rem',
           backgroundColor: grey[100],

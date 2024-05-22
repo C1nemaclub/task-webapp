@@ -1,3 +1,4 @@
+import { DndContext, DragEndEvent } from '@dnd-kit/core';
 import { Box, Chip, Link, Paper, Stack, Typography } from '@mui/material';
 import { useLocalStorage } from '@uidotdev/usehooks';
 import { useContext, useEffect, useState } from 'react';
@@ -12,7 +13,6 @@ import { IMAGE_BASE_URL } from '../../utils/constants';
 import SelectTeamCard from './components/select-team-card';
 import TaskColumn from './components/task-column';
 import { GroupedTasks } from './utils/constants';
-import { TeamState } from '../../core/features/teams/teamSlicer';
 
 const Dashboard = () => {
   const { user } = useContext(AuthContext);
@@ -51,7 +51,6 @@ const Dashboard = () => {
   const currentTeam = userTeams.find((team) => team.id === activeTeam);
   // console.log(teamTasks);
 
-  console.log(teamTasks);
   const groupedTasks = teamTasks.reduce((acc, current) => {
     const columnName = current.expand.column.name;
     if (!acc[columnName]) {
@@ -60,6 +59,60 @@ const Dashboard = () => {
     acc[columnName].push(current);
     return acc;
   }, {} as GroupedTasks);
+
+  const [droppedItems, setDroppedItems] = useState<[string, Task[]][]>(
+    Object.entries(groupedTasks)
+  );
+  const handleDragEnd = (e: DragEndEvent) => {
+    const { over, active } = e;
+    if (!over) return;
+
+    const activeId = active.id;
+    const overId = over.id;
+
+    // Find the column from which the task was dragged
+    const sourceIndex = droppedItems.findIndex(([, tasks]) =>
+      tasks.some((task) => task.id === activeId)
+    );
+    if (sourceIndex === -1) return;
+
+    const sourceColumn = droppedItems[sourceIndex];
+    const [sourceColumnName, sourceTasks] = sourceColumn;
+
+    // Find the task being dragged
+    const taskIndex = sourceTasks.findIndex((task) => task.id === activeId);
+    const task = sourceTasks[taskIndex];
+
+    // If the task is dropped in the same column, do nothing
+    if (sourceColumnName === overId) return;
+
+    // Remove task from the source column
+    const newSourceTasks = [...sourceTasks];
+    newSourceTasks.splice(taskIndex, 1);
+
+    // Find the destination column
+    const destinationIndex = droppedItems.findIndex(([key]) => key === overId);
+    const destinationColumn = droppedItems[destinationIndex];
+    const [destinationColumnName, destinationTasks] = destinationColumn;
+
+    // Add task to the destination column
+    const newDestinationTasks = [task, ...destinationTasks];
+
+    // Update the state
+    const newDroppedItems: [string, Task[]][] = droppedItems.map(
+      ([key, tasks], index) => {
+        if (index === sourceIndex) {
+          return [sourceColumnName, newSourceTasks];
+        }
+        if (index === destinationIndex) {
+          return [destinationColumnName, newDestinationTasks];
+        }
+        return [key, tasks];
+      }
+    );
+
+    setDroppedItems(newDroppedItems);
+  };
 
   if (loadingTeams) return <Typography variant='h1'>Loading...</Typography>;
 
@@ -111,10 +164,16 @@ const Dashboard = () => {
               justifyContent={{ xs: 'center', md: 'space-between' }}
               alignItems={{ xs: 'center', md: 'flex-start' }}
               direction={{ xs: 'column', md: 'row' }}>
-              {Object.entries(groupedTasks).map((group) => {
-                const [column, tasks] = group as [string, Task[]];
-                return <TaskColumn column={column} tasks={tasks} key={column} />;
-              })}
+              <DndContext onDragEnd={handleDragEnd}>
+                {/* {Object.entries(droppedItems).map((group) => {
+                  const [column, tasks] = group as [string, Task[]];
+                  return <TaskColumn column={column} tasks={tasks} key={column} />;
+                })} */}
+                {droppedItems.map((group) => {
+                  const [column, tasks] = group as [string, Task[]];
+                  return <TaskColumn column={column} tasks={tasks} key={column} />;
+                })}
+              </DndContext>
             </Stack>
           </>
         )}
