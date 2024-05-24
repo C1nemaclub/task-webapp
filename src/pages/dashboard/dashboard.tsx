@@ -23,7 +23,7 @@ const Dashboard = () => {
   const [activeTeam, setActiveTeam] = useLocalStorage('defaultTeam', '');
   const [myTeams, setMyTeams] = useState<Team[]>([]);
 
-  const { teamTasks } = taskState;
+  const { teamTasks, loading: loadingTasks } = taskState;
 
   useEffect(() => {
     dispatch(getTasks());
@@ -49,20 +49,29 @@ const Dashboard = () => {
   const hasTeamSelected = activeTeam !== '';
 
   const currentTeam = userTeams.find((team) => team.id === activeTeam);
-  // console.log(teamTasks);
 
-  const groupedTasks = teamTasks.reduce((acc, current) => {
-    const columnName = current.expand.column.name;
-    if (!acc[columnName]) {
-      acc[columnName] = [];
+  const [droppedItems, setDroppedItems] = useState<[string, Task[]][]>([]);
+  console.log(teamTasks);
+
+  useEffect(() => {
+    if (!loadingTasks && teamTasks.length > 0) {
+      const groupedTasks: GroupedTasks = teamTasks.reduce((acc, current) => {
+        const columnName = current.expand.column.name;
+        if (!acc[columnName]) {
+          acc[columnName] = [];
+        }
+        acc[columnName].push(current);
+        return acc;
+      }, {} as GroupedTasks);
+
+      setDroppedItems(Object.entries(groupedTasks));
     }
-    acc[columnName].push(current);
-    return acc;
-  }, {} as GroupedTasks);
+  }, [loadingTasks, teamTasks]);
 
-  const [droppedItems, setDroppedItems] = useState<[string, Task[]][]>(
-    Object.entries(groupedTasks)
-  );
+  // const handleDragStart = () => {}
+  // const handleDragEnd2 = () => {}
+  // const handleMove = () => {}
+
   const handleDragEnd = (e: DragEndEvent) => {
     const { over, active } = e;
     if (!over) return;
@@ -112,9 +121,14 @@ const Dashboard = () => {
     );
 
     setDroppedItems(newDroppedItems);
+    // console.log(newDroppedItems);
+    // print the ones that changed
+    console.log('source', sourceColumnName, newSourceTasks);
+    console.log('destination', destinationColumnName, newDestinationTasks);
   };
 
-  if (loadingTeams) return <Typography variant='h1'>Loading...</Typography>;
+  if (loadingTeams || loadingTeams)
+    return <Typography variant='h1'>Loading...</Typography>;
 
   return (
     <Box

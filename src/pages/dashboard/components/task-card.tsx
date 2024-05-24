@@ -42,6 +42,8 @@ const TaskCard: FC<TaskCardProps> = ({ task }) => {
         transform: transform
           ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
           : undefined,
+        padding: '1rem',
+        backgroundColor: grey[100],
       }}>
       <Stack direction='row' justifyContent='space-between' mb={1}>
         <Chip
@@ -63,9 +65,7 @@ const TaskCard: FC<TaskCardProps> = ({ task }) => {
         </Stack>
       </Stack>
       <Card
-        // style={style}
         sx={{
-          padding: '1rem',
           backgroundColor: grey[100],
         }}
         elevation={0}>
