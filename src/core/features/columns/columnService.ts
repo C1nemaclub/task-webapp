@@ -12,3 +12,10 @@ export const updateColumn = async (columnName: string, columnId: string) => {
     name: columnName,
   });
 };
+
+export const getColumnsTasksByBoardId = async (boardId: string) => {
+  return await pb.collection('ColumnsAndTasks').getFullList<Column>({
+    filter: `boardId="${boardId}"`,
+    expand: 'tasks',
+  });
+};

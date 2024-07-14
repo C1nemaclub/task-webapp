@@ -15,48 +15,42 @@ import { grey } from '@mui/material/colors';
 import { FC } from 'react';
 import { Task } from '../../../core/types/roles.model';
 import { IMAGE_BASE_URL } from '../../../utils/constants';
-import { formatDate } from '../../../utils/functions';
-import { useDraggable } from '@dnd-kit/core';
+import { dateToWhen } from '../../../utils/functions';
+import { useNavigate } from 'react-router-dom';
 
 type TaskCardProps = {
   task: Task;
 };
 
 const TaskCard: FC<TaskCardProps> = ({ task }) => {
-  const user = task.expand.asignee;
-  const type = task.expand.type;
+  const user = task.asignee;
+  const navigate = useNavigate();
 
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id: task.id,
-  });
+  const handleEdit = () => {
+    navigate(`/overview/edit-task/${task.id}`);
+  };
 
   return (
     <Box
       mb={2}
       width='100%'
-      ref={setNodeRef}
-      {...listeners}
-      {...attributes}
       sx={{
         cursor: 'pointer',
-        transform: transform
-          ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
-          : undefined,
         padding: '1rem',
         backgroundColor: grey[100],
       }}>
       <Stack direction='row' justifyContent='space-between' mb={1}>
         <Chip
-          label={task.expand.type.name}
+          label={task.taskType}
           sx={{
-            backgroundColor: `hsl(${type.color}, 100%, 91%)`,
-            color: `hsl(${type.color}, 35%, 50%)`,
+            backgroundColor: `hsl(${task.color}, 100%, 91%)`,
+            color: `hsl(${task.color}, 35%, 50%)`,
           }}
         />
         <Stack>
           <Chip
             avatar={<AccessTimeIcon />}
-            label={formatDate(task.dueDate)}
+            label={dateToWhen(task.dueDate)}
             sx={{
               backgroundColor: grey[100],
               color: `hsl(236, 85%, 70%)`,
@@ -75,7 +69,10 @@ const TaskCard: FC<TaskCardProps> = ({ task }) => {
         <Typography paragraph color={grey[600]}>
           {task.description}
         </Typography>
-        <Stack direction='row' justifyContent='space-between' alignItems='center'>
+        <Stack
+          direction='row'
+          justifyContent='space-between'
+          alignItems='center'>
           <Tooltip title={user?.name}>
             <IconButton>
               <Avatar
@@ -85,11 +82,11 @@ const TaskCard: FC<TaskCardProps> = ({ task }) => {
             </IconButton>
           </Tooltip>
           <Stack direction='row'>
-            <IconButton>
-              <CreateIcon fontSize='medium' color='primary' />
+            <IconButton onClick={handleEdit}>
+              <CreateIcon fontSize='medium' color='action' />
             </IconButton>
             <IconButton>
-              <DeleteForeverIcon fontSize='medium' color='primary' />
+              <DeleteForeverIcon fontSize='medium' color='action' />
             </IconButton>
           </Stack>
         </Stack>

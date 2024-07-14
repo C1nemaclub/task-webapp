@@ -94,5 +94,8 @@ export const theme = createTheme({
         }),
       },
     },
+    MuiSelect: {
+      styleOverrides: {},
+    },
   },
 });

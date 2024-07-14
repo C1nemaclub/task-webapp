@@ -1,30 +1,49 @@
-import { Team } from '../../types/roles.model';
+import { Board, Team } from '../../types/roles.model';
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import * as service from './teamService';
 import { ClientResponseError } from 'pocketbase';
 
 export type TeamState = {
   teams: Team[];
+  boards: Board[];
   loading: boolean;
   error: string | null;
 };
 
 const initialState: TeamState = {
   teams: [],
+  boards: [],
   loading: false,
   error: null,
 };
 
-export const getTeams = createAsyncThunk('team/getTeams', async (_, thunkAPI) => {
-  try {
-    const response = await service.getTeams();
-    return response;
-  } catch (e) {
-    console.log(e);
-    const error = e as ClientResponseError;
-    return thunkAPI.rejectWithValue(error.message);
+export const getTeams = createAsyncThunk(
+  'team/getTeams',
+  async (_, thunkAPI) => {
+    try {
+      const response = await service.getTeams();
+      return response;
+    } catch (e) {
+      console.log(e);
+      const error = e as ClientResponseError;
+      return thunkAPI.rejectWithValue(error.message);
+    }
   }
-});
+);
+
+export const getTeamBoards = createAsyncThunk(
+  'team/getTeamBoards',
+  async (teamId: string, thunkAPI) => {
+    try {
+      const response = await service.getTeamBoards(teamId);
+      return response;
+    } catch (e) {
+      console.log(e);
+      const error = e as ClientResponseError;
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
 
 export const createTeam = createAsyncThunk(
   'team/createTeam',
@@ -59,6 +78,21 @@ export const teamSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
+      .addCase(getTeamBoards.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(
+        getTeamBoards.fulfilled,
+        (state, action: PayloadAction<Board[]>) => {
+          state.boards = action.payload;
+          state.loading = false;
+        }
+      )
+      .addCase(getTeamBoards.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+
       .addCase(createTeam.pending, (state) => {
         state.loading = true;
       })

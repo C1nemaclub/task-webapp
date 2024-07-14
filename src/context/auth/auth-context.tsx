@@ -8,6 +8,7 @@ import { UserSignIn } from '../../pages/sign-in/utils/constants';
 import { UserSignUp } from '../../pages/sign-up/utils/constants';
 import { messages } from '../../utils/constants.ts';
 import { ROLES } from '../../core/types/roles.model';
+import { useLocalStorage } from '@uidotdev/usehooks';
 
 type AuthContextType = {
   user: TUser | null;
@@ -22,29 +23,37 @@ type AuthContextType = {
   setUser: React.Dispatch<React.SetStateAction<TUser | null>>;
 };
 
-export const AuthContext = createContext<AuthContextType>({} as AuthContextType);
+export const AuthContext = createContext<AuthContextType>(
+  {} as AuthContextType
+);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  // const userFromStorage = pb.authStore.isValid && (pb.authStore.model as TUser);
+  const [, setActiveTeam] = useLocalStorage('defaultTeam', '');
   const [user, setUser] = useState<TUser | null>(null);
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const toast = useContext(ToastContext);
 
   const logOut = async () => {
     console.log('Logging out...');
     pb.authStore.clear();
+    setActiveTeam('');
     setUser(null);
   };
 
   const logIn = async (data: UserSignIn) => {
     try {
       setLoading(true);
-      await pb
-        .collection('users')
-        .authWithPassword(data.email, data.password, { expand: 'teamId,roleId' });
+      await pb.collection('users').authWithPassword(data.email, data.password, {
+        expand: 'teamId,roleId,activeTeam',
+      });
       const user = pb.authStore.model as TUser;
       setUser(user);
+      toast.openToast({
+        severity: 'success',
+        message: 'You have successfully logged in! 🎉',
+      });
+      navigate('/overview/dashboard');
     } catch (e) {
       console.log(e, '📷');
       toast.openToast({
@@ -143,18 +152,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const getUser = async () => {
     try {
+      setLoading(true);
       pb.authStore.isValid &&
-        (await pb.collection('users').authRefresh({ expand: 'teamId,roleId' }));
+        (await pb
+          .collection('users')
+          .authRefresh({ expand: 'teamId,roleId,activeTeam' }));
       setUser(pb.authStore.model as TUser);
-      // if (pb.authStore.isValid) {
-      //   const loggedUser = await pb
-      //     .collection('users')
-      //     .getOne<TUser>(pb.authStore.model?.id as string, { expand: 'teamId,roleId' });
-      //   console.log(loggedUser, 'LOGGED USER');
-      //   setUser(loggedUser);
-      // }
     } catch (e) {
       console.log(e);
+    } finally {
+      setLoading(false);
     }
   };
 

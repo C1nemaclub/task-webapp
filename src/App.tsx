@@ -1,4 +1,9 @@
-import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import {
+  Navigate,
+  Route,
+  BrowserRouter as Router,
+  Routes,
+} from 'react-router-dom';
 import AuthLayout from './components/shared/auth-layout.tsx';
 import Toast from './components/shared/toast.tsx';
 import UserLayout from './components/shared/user-layout.tsx';
@@ -9,6 +14,9 @@ import PasswordConfirmReset from './pages/password-confirm-reset/password-confir
 import SignUp from './pages/sign-up/sign-up.tsx';
 import Teams from './pages/teams/teams.tsx';
 import NewTeam from './pages/new-team/new-team.tsx';
+import NewTask from './pages/new-task/new-task.tsx';
+import EditTask from './pages/edit-task/edit-task.tsx';
+import Profile from './pages/profile/Profile.tsx';
 import { AuthProvider } from './context/auth/auth-context.tsx';
 import { ToastProvider } from './context/toast-context.tsx';
 
@@ -32,11 +40,14 @@ function App() {
               </Route>
               <Route path='/overview' element={<UserLayout />}>
                 <Route index element={<Navigate to='/overview/dashboard' />} />
+                <Route path='profile' element={<Profile />} />
                 <Route path='dashboard' element={<Dashboard />} />
                 <Route path='tasks' element={<h2>Tasks</h2>} />
                 <Route path='teams' element={<Teams />} />
                 <Route path='teams/new-team' element={<NewTeam />} />
                 <Route path='settings' element={<h2>Settings</h2>} />
+                <Route path='new-task' element={<NewTask />} />
+                <Route path='edit-task/:id' element={<EditTask />} />
               </Route>
             </Routes>
           </AuthProvider>

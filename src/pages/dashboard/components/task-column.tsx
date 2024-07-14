@@ -1,7 +1,5 @@
-import { useDroppable } from '@dnd-kit/core';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {
-  Box,
   IconButton,
   InputAdornment,
   Stack,
@@ -11,33 +9,32 @@ import {
 import { grey } from '@mui/material/colors';
 import { useFormik } from 'formik';
 import { FC, useContext } from 'react';
+import { useDispatch } from 'react-redux';
 import InputField from '../../../components/shared/input-field';
+import { ToastContext } from '../../../context/toast-context';
+import { updateColumn } from '../../../core/features/columns/columnSlicer';
 import { Task } from '../../../core/types/roles.model';
 import { AppDispatch } from '../../../store/store';
 import { EditColumn, editColumnSchema } from '../utils/constants';
 import TaskCard from './task-card';
-import { useDispatch } from 'react-redux';
-import { ToastContext } from '../../../context/toast-context';
-import { updateColumn } from '../../../core/features/columns/columnSlicer';
+
 type TaskColumnProps = {
   column: string;
+  id: string;
   tasks: Task[];
 };
 
-const TaskColumn: FC<TaskColumnProps> = ({ column, tasks }) => {
+const TaskColumn: FC<TaskColumnProps> = ({ column, id, tasks }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { openToast } = useContext(ToastContext);
-
-  const { isOver, setNodeRef } = useDroppable({
-    id: column,
-  });
 
   const handleSubmit = ({ name }: EditColumn) => {
     try {
       if (!didNameChange) return;
-      const columnId = tasks[0].expand.column.id;
-      dispatch(updateColumn({ name: name, id: columnId }));
+      dispatch(updateColumn({ name: name, id }));
     } catch (e) {
+      console.log(e);
+
       openToast({
         message: "Couldn't update column name",
         severity: 'error',
@@ -55,18 +52,18 @@ const TaskColumn: FC<TaskColumnProps> = ({ column, tasks }) => {
 
   return (
     <Stack
-      ref={setNodeRef}
+      position='relative'
       justifyContent='start'
       alignItems='start'
       width='100%'
       minHeight={250}
       sx={{
-        padding: 2,
-        backgroundColor: isOver ? 'primary.100' : 'transparent',
+        py: 2,
+        overflowY: 'auto',
       }}
       flexGrow={0.3}
       maxWidth={400}>
-      <Box component='form' onSubmit={form.handleSubmit}>
+      <Stack component='form' onSubmit={form.handleSubmit} direction='row'>
         <InputField
           form={form}
           name='name'
@@ -101,7 +98,7 @@ const TaskColumn: FC<TaskColumnProps> = ({ column, tasks }) => {
             ),
           }}
         />
-      </Box>
+      </Stack>
       <Stack mt={4} width='100%'>
         {tasks.map((task) => {
           return <TaskCard key={task.id} task={task} />;

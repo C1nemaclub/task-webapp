@@ -1,14 +1,26 @@
 import { format } from 'date-fns';
-import { GithubMeta, GoogleMeta, ProviderMeta, TUser } from '../core/types/roles.model';
+import {
+  GithubMeta,
+  GoogleMeta,
+  ProviderMeta,
+  TUser,
+} from '../core/types/roles.model';
+import { IMAGE_BASE_URL } from './constants';
+import { FormikProps } from 'formik';
 
-const validFileExtensions = { image: ['jpg', 'gif', 'png', 'jpeg', 'svg', 'webp'] };
+const validFileExtensions = {
+  image: ['jpg', 'gif', 'png', 'jpeg', 'svg', 'webp'],
+};
 
 export const isValidFileType = (
   fileName: string,
   fileType: keyof typeof validFileExtensions
 ) => {
   if (fileName) {
-    return validFileExtensions[fileType].indexOf(String(fileName.split('.').pop())) > -1;
+    return (
+      validFileExtensions[fileType].indexOf(String(fileName.split('.').pop())) >
+      -1
+    );
   }
   return false;
 };
@@ -47,4 +59,19 @@ export const isUserValid = (user: TUser) => {
     return false;
   }
   return true;
+};
+
+export const getUserAvatar = (user: TUser) => {
+  const avatarSrc = `${IMAGE_BASE_URL}${user.id}/${user.avatar}`;
+  return avatarSrc;
+};
+
+export const formatName = (name: string) => {
+  return name.charAt(0).toUpperCase() + name.slice(1);
+};
+
+export const getFieldError = (form: FormikProps<any>, fieldName: string) => {
+  const isError = Boolean(form.errors[fieldName] && form.touched[fieldName]);
+  const message = isError ? (form.errors[fieldName] as string) : '';
+  return { error: isError, helperText: message };
 };

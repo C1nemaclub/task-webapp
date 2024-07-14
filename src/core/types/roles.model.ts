@@ -116,7 +116,9 @@ export type TUser = {
   expand: {
     teamId: Team[];
     roleId: Role[];
+    activeTeam: Team;
   };
+  activeTeam: Team['id'];
 };
 
 export type Task = {
@@ -127,14 +129,16 @@ export type Task = {
   updated: string;
   created: string;
   columnId: Column['id'];
-  asignee: TUser['id'];
   createdBy: TUser['id'];
   type: TaskType['id'];
   expand: {
     asignee: TUser;
     type: TaskType;
-    column: Column
+    column: Column;
   };
+  taskType: string;
+  color: string;
+  asignee: TUser;
 };
 
 export type TaskType = {
@@ -167,6 +171,7 @@ export type Column = {
   boardId: Board['id'];
   updated: string;
   created: string;
+  tasks: Task[];
 };
 
 export type ProviderMeta = GithubMeta | GoogleMeta;
