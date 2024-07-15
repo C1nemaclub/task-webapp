@@ -1,59 +1,101 @@
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Box from '@mui/material/Box';
-import React from 'react';
-import NewTeam from '../new-team/new-team';
-
-interface TabPanelProps {
-  children?: React.ReactNode;
-  dir?: string;
-  index: number;
-  value: number;
-}
-
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role='tabpanel'
-      hidden={value !== index}
-      id={`full-width-tabpanel-${index}`}
-      aria-labelledby={`full-width-tab-${index}`}
-      {...other}>
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-    </div>
-  );
-}
+import AddIcon from '@mui/icons-material/Add';
+import {
+  Button,
+  Link,
+  Stack,
+  ToggleButton,
+  ToggleButtonGroup,
+  Typography,
+} from '@mui/material';
+import { useFormik } from 'formik';
+import { useContext, useEffect, useState } from 'react';
+import { Navigate, Link as RouterLink } from 'react-router-dom';
+import Section from '../../components/shared/section';
+import { AuthContext } from '../../context/auth/auth-context';
+import { TUser } from '../../core/types/roles.model';
+import pb from '../../libs/pocketbase';
+import { initialValues, validationSchema } from './utils/constants';
+import { ActiveTeamForm } from './utils/types';
 
 const Teams = () => {
-  const [value, setValue] = React.useState(1);
+  const { user } = useContext(AuthContext);
+  const [initialValuesForm, setInitialValuesForm] = useState(initialValues);
 
-  const handleChange = (_: React.SyntheticEvent, newValue: string) => {
-    setValue(Number(newValue));
+  const handleSubmit = async (payload: ActiveTeamForm) => {
+    console.log(payload);
+    // export const updateColumn = async (columnName: string, columnId: string) => {
+    //   return await pb.collection('columns').update<Column>(columnId, {
+    //     name: columnName,
+    //   });
+    // };
+    const res = await pb.collection('users').update<TUser>(String(user?.id), {
+      activeTeam: payload.activeTeam,
+    });
+    console.log(res);
   };
 
+  const form = useFormik<ActiveTeamForm>({
+    enableReinitialize: true,
+    initialValues: initialValuesForm,
+    validationSchema: validationSchema,
+    onSubmit: handleSubmit,
+  });
+
+  useEffect(() => {
+    if (user) {
+      setInitialValuesForm({
+        activeTeam: user.activeTeam,
+      });
+    }
+  }, [user]);
+
+  if (!user) {
+    return <Navigate to='/auth/sign-in' />;
+  }
+
+  const didChange = form.values.activeTeam === form.initialValues.activeTeam;
+
   return (
-    <div>
-      Teams
-      <Box sx={{ width: '100%' }}>
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          aria-label='wrapped label tabs example'>
-          <Tab value={1} label='Item One' />
-          <Tab value={2} label='Item Two' />
-          <Tab value={3} label='New Team' />
-        </Tabs>
-        <TabPanel value={value} index={1}>
-          Item One
-        </TabPanel>
-        <TabPanel value={value} index={3}>
-          <NewTeam />
-        </TabPanel>
-      </Box>
-      {/* <Outlet /> */}
-    </div>
+    <Section
+      title='Teams'
+      sx={{
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1rem',
+      }}>
+      <Link to='/overview/teams/new-team' component={RouterLink} ml='auto'>
+        <Button startIcon={<AddIcon />} sx={{ ml: 'auto' }} size='small'>
+          New Team
+        </Button>
+      </Link>
+      <Typography variant='h5' mb={2} mt={2}>
+        Current Teams
+      </Typography>
+      <Stack
+        component='form'
+        onSubmit={form.handleSubmit}
+        gap={2}
+        alignItems='start'>
+        <ToggleButtonGroup
+          onChange={(_, value) => form.setFieldValue('activeTeam', value)}
+          value={form.values.activeTeam}
+          exclusive
+          color='primary'>
+          {user.expand.teamId.map((team) => {
+            return (
+              <ToggleButton key={team.id} value={team.id}>
+                {team.name}
+              </ToggleButton>
+            );
+          })}
+        </ToggleButtonGroup>
+        <Button type='submit' disabled={!form.isValid || didChange}>
+          Update
+        </Button>
+      </Stack>
+    </Section>
   );
 };
 

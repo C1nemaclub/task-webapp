@@ -3,7 +3,7 @@ export const theme = createTheme({
   palette: {
     primary: {
       // light: '#ff00ff',
-      // main: '#bc560a',
+      main: '#6366f1',
       contrastText: '#fff',
       '50': '#eff2fe',
       '100': '#e0e6fe',
@@ -19,7 +19,7 @@ export const theme = createTheme({
     text: {
       // primary: '#fff',
       // secondary: '#fff',
-      disabled: '#00ff00',
+      // disabled: '#00ff00',
     },
     secondary: {
       main: '#ffcc80',
@@ -93,6 +93,9 @@ export const theme = createTheme({
           background: theme.palette.primary['700' as keyof PaletteColor],
         }),
       },
+    },
+    MuiSelect: {
+      styleOverrides: {},
     },
   },
 });

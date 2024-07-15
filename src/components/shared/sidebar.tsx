@@ -51,7 +51,9 @@ const categories = [
 const Sidebar = () => {
   const { logOut } = useContext(AuthContext);
   const { palette } = useTheme();
-  const style = { '--primary-main-color': palette.primary.main } as React.CSSProperties;
+  const style = {
+    '--primary-main-color': palette.primary.main,
+  } as React.CSSProperties;
 
   const {
     windowSize: { width },
@@ -83,6 +85,7 @@ const Sidebar = () => {
           variant: 'h5',
           fontWeight: 'bold',
         }}
+        stackProps={{ justifyContent: 'center' }}
       />
       <List
         sx={{
@@ -99,7 +102,9 @@ const Sidebar = () => {
                   key={name}
                   to={route}
                   style={style}
-                  className={({ isActive }) => (isActive ? 'active-nav nav' : 'nav')}>
+                  className={({ isActive }) =>
+                    isActive ? 'active-nav nav' : 'nav'
+                  }>
                   {({ isActive }) => {
                     return (
                       <ListItemButton

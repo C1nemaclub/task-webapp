@@ -28,6 +28,7 @@ const useNewTeam = () => {
 
   const newTeamForm = useFormik({
     initialValues,
+    validateOnMount: true,
     validationSchema: newTeamSchema,
     onSubmit: handleSubmit,
     validateOnBlur: false,

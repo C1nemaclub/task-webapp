@@ -1,5 +1,6 @@
-import { TextField, TextFieldProps, Typography } from '@mui/material';
+import { TextField, TextFieldProps } from '@mui/material';
 import { FormikProps } from 'formik';
+import { getFieldError } from '../../utils/functions';
 
 type InputFieldProps = TextFieldProps & {
   form: FormikProps<any>;
@@ -7,17 +8,13 @@ type InputFieldProps = TextFieldProps & {
 };
 
 const InputField = ({ name, form, ...props }: InputFieldProps) => {
-  const isError = !!form.errors[name] && !!form.touched[name] && form.submitCount >= 1;
   return (
     <TextField
       name={name}
       onChange={form.handleChange}
       onBlur={form.handleBlur}
       value={form.values[name]}
-      error={isError}
-      helperText={
-        isError && <Typography component='span'>{form.errors[name] as string}</Typography>
-      }
+      {...getFieldError(form, name)}
       fullWidth
       {...props}
     />
