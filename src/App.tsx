@@ -3,29 +3,27 @@ import {
   Route,
   BrowserRouter as Router,
   Routes,
-  useRoutes,
 } from 'react-router-dom';
 import AuthLayout from './components/shared/auth-layout.tsx';
 import Toast from './components/shared/toast.tsx';
 import UserLayout from './components/shared/user-layout.tsx';
-import Dashboard from './pages/dashboard/dashboard';
-import SignIn from './pages/sign-in/sign-in.tsx';
-import ForgotPassword from './pages/forgot-password/forgot-password.tsx';
-import PasswordConfirmReset from './pages/password-confirm-reset/password-confirm-reset.tsx';
-import SignUp from './pages/sign-up/sign-up.tsx';
-import Teams from './pages/teams/teams.tsx';
-import NewTeam from './pages/new-team/new-team.tsx';
-import NewTask from './pages/new-task/new-task.tsx';
-import EditTask from './pages/edit-task/edit-task.tsx';
-import Profile from './pages/profile/Profile.tsx';
 import { AuthProvider } from './context/auth/auth-context.tsx';
 import { ToastProvider } from './context/toast-context.tsx';
+import Dashboard from './pages/dashboard/dashboard';
+import EditTask from './pages/edit-task/edit-task.tsx';
+import ForgotPassword from './pages/forgot-password/forgot-password.tsx';
+import NewTask from './pages/new-task/new-task.tsx';
+import NewTeam from './pages/new-team/new-team.tsx';
+import PasswordConfirmReset from './pages/password-confirm-reset/password-confirm-reset.tsx';
+import Profile from './pages/profile/Profile.tsx';
 import Settings from './pages/settings/settings.tsx';
+import SignIn from './pages/sign-in/sign-in.tsx';
+import SignUp from './pages/sign-up/sign-up.tsx';
+import Teams from './pages/teams/teams.tsx';
 
 function App() {
   return (
-    <>
-      {/* <Router> */}
+    <Router>
       <ToastProvider>
         <Toast />
         <AuthProvider>
@@ -54,7 +52,7 @@ function App() {
           </Routes>
         </AuthProvider>
       </ToastProvider>
-    </>
+    </Router>
   );
 }
 
