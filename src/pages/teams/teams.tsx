@@ -1,5 +1,7 @@
+import AddIcon from '@mui/icons-material/Add';
 import {
   Button,
+  Link,
   Stack,
   ToggleButton,
   ToggleButtonGroup,
@@ -7,13 +9,13 @@ import {
 } from '@mui/material';
 import { useFormik } from 'formik';
 import { useContext, useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Link as RouterLink } from 'react-router-dom';
 import Section from '../../components/shared/section';
 import { AuthContext } from '../../context/auth/auth-context';
+import { TUser } from '../../core/types/roles.model';
+import pb from '../../libs/pocketbase';
 import { initialValues, validationSchema } from './utils/constants';
 import { ActiveTeamForm } from './utils/types';
-import pb from '../../libs/pocketbase';
-import { TUser } from '../../core/types/roles.model';
 
 const Teams = () => {
   const { user } = useContext(AuthContext);
@@ -54,35 +56,46 @@ const Teams = () => {
   const didChange = form.values.activeTeam === form.initialValues.activeTeam;
 
   return (
-    <div>
-      <Section title='Teams'>
-        <Typography variant='h5' mb={2}>
-          Current Teams
-        </Typography>
-        <Stack
-          component='form'
-          onSubmit={form.handleSubmit}
-          gap={2}
-          alignItems='start'>
-          <ToggleButtonGroup
-            onChange={(_, value) => form.setFieldValue('activeTeam', value)}
-            value={form.values.activeTeam}
-            exclusive
-            color='primary'>
-            {user.expand.teamId.map((team) => {
-              return (
-                <ToggleButton key={team.id} value={team.id}>
-                  {team.name}
-                </ToggleButton>
-              );
-            })}
-          </ToggleButtonGroup>
-          <Button type='submit' disabled={!form.isValid || didChange}>
-            Update
-          </Button>
-        </Stack>
-      </Section>
-    </div>
+    <Section
+      title='Teams'
+      sx={{
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1rem',
+      }}>
+      <Link to='/overview/teams/new-team' component={RouterLink} ml='auto'>
+        <Button startIcon={<AddIcon />} sx={{ ml: 'auto' }} size='small'>
+          New Team
+        </Button>
+      </Link>
+      <Typography variant='h5' mb={2} mt={2}>
+        Current Teams
+      </Typography>
+      <Stack
+        component='form'
+        onSubmit={form.handleSubmit}
+        gap={2}
+        alignItems='start'>
+        <ToggleButtonGroup
+          onChange={(_, value) => form.setFieldValue('activeTeam', value)}
+          value={form.values.activeTeam}
+          exclusive
+          color='primary'>
+          {user.expand.teamId.map((team) => {
+            return (
+              <ToggleButton key={team.id} value={team.id}>
+                {team.name}
+              </ToggleButton>
+            );
+          })}
+        </ToggleButtonGroup>
+        <Button type='submit' disabled={!form.isValid || didChange}>
+          Update
+        </Button>
+      </Stack>
+    </Section>
   );
 };
 

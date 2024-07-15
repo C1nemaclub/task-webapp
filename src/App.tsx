@@ -3,6 +3,7 @@ import {
   Route,
   BrowserRouter as Router,
   Routes,
+  useRoutes,
 } from 'react-router-dom';
 import AuthLayout from './components/shared/auth-layout.tsx';
 import Toast from './components/shared/toast.tsx';
@@ -19,40 +20,40 @@ import EditTask from './pages/edit-task/edit-task.tsx';
 import Profile from './pages/profile/Profile.tsx';
 import { AuthProvider } from './context/auth/auth-context.tsx';
 import { ToastProvider } from './context/toast-context.tsx';
+import Settings from './pages/settings/settings.tsx';
 
 function App() {
   return (
     <>
-      <Router>
-        <ToastProvider>
-          <Toast />
-          <AuthProvider>
-            <Routes>
-              <Route index element={<Navigate to='/auth/sign-in' />} />
-              <Route path='/auth' element={<AuthLayout />}>
-                <Route path='sign-in' element={<SignIn />} />
-                <Route path='sign-up' element={<SignUp />} />
-                <Route path='forgot-password' element={<ForgotPassword />} />
-                <Route
-                  path='confirm-password-reset/:token'
-                  element={<PasswordConfirmReset />}
-                />
-              </Route>
-              <Route path='/overview' element={<UserLayout />}>
-                <Route index element={<Navigate to='/overview/dashboard' />} />
-                <Route path='profile' element={<Profile />} />
-                <Route path='dashboard' element={<Dashboard />} />
-                <Route path='tasks' element={<h2>Tasks</h2>} />
-                <Route path='teams' element={<Teams />} />
-                <Route path='teams/new-team' element={<NewTeam />} />
-                <Route path='settings' element={<h2>Settings</h2>} />
-                <Route path='new-task' element={<NewTask />} />
-                <Route path='edit-task/:id' element={<EditTask />} />
-              </Route>
-            </Routes>
-          </AuthProvider>
-        </ToastProvider>
-      </Router>
+      {/* <Router> */}
+      <ToastProvider>
+        <Toast />
+        <AuthProvider>
+          <Routes>
+            <Route index element={<Navigate to='/auth/sign-in' />} />
+            <Route path='/auth' element={<AuthLayout />}>
+              <Route path='sign-in' element={<SignIn />} />
+              <Route path='sign-up' element={<SignUp />} />
+              <Route path='forgot-password' element={<ForgotPassword />} />
+              <Route
+                path='confirm-password-reset/:token'
+                element={<PasswordConfirmReset />}
+              />
+            </Route>
+            <Route path='/overview' element={<UserLayout />}>
+              <Route index element={<Navigate to='/overview/dashboard' />} />
+              <Route path='profile' element={<Profile />} />
+              <Route path='dashboard' element={<Dashboard />} />
+              <Route path='tasks' element={<h2>Tasks</h2>} />
+              <Route path='teams' element={<Teams />} />
+              <Route path='teams/new-team' element={<NewTeam />} />
+              <Route path='settings' element={<Settings />} />
+              <Route path='new-task' element={<NewTask />} />
+              <Route path='edit-task/:id' element={<EditTask />} />
+            </Route>
+          </Routes>
+        </AuthProvider>
+      </ToastProvider>
     </>
   );
 }

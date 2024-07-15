@@ -6,13 +6,16 @@ import './index.css';
 import { Provider } from 'react-redux';
 import { theme } from './styles/styleOverrides.ts';
 import { store } from './store/store.ts';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <App />
+        <Router>
+          <App />
+        </Router>
       </ThemeProvider>
     </Provider>
   </React.StrictMode>

@@ -68,7 +68,6 @@ const Dashboard = () => {
         display: 'flex',
         flexDirection: 'column',
         gap: '1rem',
-        padding: '1rem',
       }}>
       <Box>
         {userHasTeam && !hasTeamSelected && (

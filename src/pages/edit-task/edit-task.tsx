@@ -12,29 +12,28 @@ const EditTask = () => {
   );
   console.log(id);
 
-  const getTask = async () => {
-    try {
-      if (id) {
-        const response = await pb.collection('ProTasks').getOne(id, {
-          expand: 'asignee,type,teamId,boardId,column',
-        });
-        const task: TaskFormEntity = {
-          title: response.title,
-          description: response.description,
-          taskType: response.expand?.type,
-          asignee: response.expand?.asignee,
-          team: response.expand?.teamId,
-          board: response.expand?.boardId,
-          column: response.expand?.column,
-        };
-        setInitialValues(task);
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   useEffect(() => {
+    const getTask = async () => {
+      try {
+        if (id) {
+          const response = await pb.collection('ProTasks').getOne(id, {
+            expand: 'asignee,type,teamId,boardId,column',
+          });
+          const task: TaskFormEntity = {
+            title: response.title,
+            description: response.description,
+            taskType: response.expand?.type,
+            asignee: response.expand?.asignee,
+            team: response.expand?.teamId,
+            board: response.expand?.boardId,
+            column: response.expand?.column,
+          };
+          setInitialValues(task);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    };
     getTask();
   }, [id]);
 

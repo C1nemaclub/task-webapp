@@ -16,7 +16,6 @@ import { formatDate, formatName, getUserAvatar } from '../../utils/functions';
 
 const Profile = () => {
   const { user } = useContext(AuthContext);
-  console.log(user);
 
   if (!user) {
     return <Navigate to='/auth/sign-in' />;
@@ -56,6 +55,16 @@ const Profile = () => {
             <ListItemText
               primary='Verified'
               secondary={<Switch checked={user.verified} disabled />}
+            />
+          </ListItem>
+        </List>
+        <Divider sx={{ py: 1 }} />
+        <Typography variant='h5'>Team Information</Typography>
+        <List disablePadding>
+          <ListItem disablePadding>
+            <ListItemText
+              primary='Current Active Team'
+              secondary={user.expand.activeTeam.name}
             />
           </ListItem>
         </List>
